@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="theme-color" content="#FF7043">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="กินอะไรดี?">
+  <title>วันนี้กินอะไรดี?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange:       #FF7043;
+      --orange-dark:  #F4511E;
+      --orange-light: #FFF3F0;
+      --orange-mid:   #FFD0C4;
+      --bg:           #F7F7F5;
+      --white:        #FFFFFF;
+      --border:       rgba(0,0,0,0.08);
+      --border-strong:rgba(0,0,0,0.14);
+      --text:         #1A1A1A;
+      --text-sub:     #666666;
+      --text-muted:   #999999;
+      --surface:      #F0F0EE;
+    }
+    html { background: var(--bg); }
+    body {
+      font-family: 'Kanit', sans-serif;
+      background: var(--bg);
+      min-height: 100dvh;
+      color: var(--text);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ── Layout ── */
+    .app {
+      max-width: 430px;
+      margin: 0 auto;
+      padding: 0 0 4rem;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 2.5rem 1.5rem 1rem;
+    }
+    .mascot { font-size: 56px; line-height: 1; margin-bottom: 0.75rem; }
+    .hero-title {
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--orange);
+      letter-spacing: -0.3px;
+    }
+    .hero-sub {
+      font-size: 14px;
+      color: var(--text-sub);
+      margin-top: 4px;
+    }
+    .streak-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      background: var(--orange-light);
+      color: var(--orange-dark);
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--orange-mid);
+      margin-top: 10px;
+      font-weight: 500;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--white);
+      border-radius: 24px;
+      margin: 0 1rem 0;
+      padding: 1.5rem 1.25rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .card-section { margin-bottom: 1.25rem; }
+    .card-section:last-child { margin-bottom: 0; }
+
+    /* ── Section Label ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .section-label span {
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+      opacity: 0.7;
+    }
+
+    /* ── Chips ── */
+    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      padding: 8px 16px;
+      border-radius: 50px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      font-size: 14px;
+      font-family: 'Kanit', sans-serif;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.12s ease;
+      user-select: none;
+      white-space: nowrap;
+      font-weight: 400;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .chip:active { transform: scale(0.95); }
+    .chip.active {
+      background: var(--orange);
+      border-color: var(--orange);
+      color: #fff;
+      font-weight: 500;
+    }
+
+    /* ── Special chips (dashed) ── */
+    .special-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .special-chip {
+      padding: 6px 14px;
+      border-radius: 50px;
+      border: 1.5px dashed var(--border-strong);
+      background: transparent;
+      font-size: 13px;
+      font-family: 'Kanit', sans-serif;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.12s ease;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .special-chip:active { transform: scale(0.95); }
+    .special-chip.active {
+      border-color: var(--orange);
+      border-style: solid;
+      color: var(--orange-dark);
+      background: var(--orange-light);
+      font-weight: 500;
+    }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: var(--border); margin: 1.25rem 0; }
+
+    /* ── CTA ── */
+    .cta-wrap { padding: 1.25rem 1rem 0; }
+    .btn-random {
+      width: 100%;
+      padding: 17px;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: 18px;
+      font-weight: 600;
+      font-family: 'Kanit', sans-serif;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      letter-spacing: 0.2px;
+      box-shadow: 0 4px 16px rgba(255,112,67,0.35);
+    }
+    .btn-random:hover { background: var(--orange-dark); box-shadow: 0 4px 20px rgba(255,112,67,0.45); }
+    .btn-random:active { transform: scale(0.98); box-shadow: none; }
+
+    .roast-msg {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      min-height: 22px;
+      margin-top: 10px;
+      transition: all 0.2s;
+    }
+    .pool-msg {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      min-height: 16px;
+    }
+
+    /* ── Result Card ── */
+    .result-wrap {
+      margin: 1rem 1rem 0;
+      background: var(--white);
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      padding: 1.75rem 1.5rem 1.5rem;
+      display: none;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      animation: fadeUp 0.25s ease;
+    }
+    .result-wrap.show { display: block; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .result-eyebrow {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-align: center;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .result-name {
+      font-size: 34px;
+      font-weight: 600;
+      color: var(--text);
+      text-align: center;
+      margin: 10px 0 4px;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+    .result-recommend {
+      font-size: 13px;
+      color: var(--orange);
+      text-align: center;
+      font-weight: 400;
+      min-height: 18px;
+    }
+    .result-roast {
+      font-size: 13px;
+      color: var(--text-sub);
+      text-align: center;
+      font-style: italic;
+      margin-top: 12px;
+      line-height: 1.65;
+      padding: 12px 16px;
+      background: var(--surface);
+      border-radius: 14px;
+    }
+    .result-divider { height: 1px; background: var(--border); margin: 1.25rem 0; }
+    .result-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .result-actions { display: flex; gap: 8px; margin-top: 1rem; }
+    .btn-action {
+      flex: 1;
+      padding: 12px 8px;
+      border-radius: 50px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      font-size: 13px;
+      font-family: 'Kanit', sans-serif;
+      color: var(--text-sub);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.12s;
+      font-weight: 400;
+    }
+    .btn-action:active { transform: scale(0.97); }
+    .btn-action.orange {
+      background: var(--orange-light);
+      border-color: var(--orange-mid);
+      color: var(--orange-dark);
+      font-weight: 500;
+    }
+    .btn-respin {
+      width: 100%;
+      margin-top: 8px;
+      padding: 12px;
+      border-radius: 50px;
+      border: 1px solid var(--border-strong);
+      background: transparent;
+      font-size: 14px;
+      font-family: 'Kanit', sans-serif;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .btn-respin:active { transform: scale(0.98); }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      padding: 2rem 1rem 0.5rem;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* ── Share Modal ── */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 100;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .modal-bg.show { display: flex; }
+    .modal {
+      background: var(--white);
+      border-radius: 28px 28px 0 0;
+      padding: 1.5rem 1.5rem 2.5rem;
+      width: 100%;
+      max-width: 430px;
+      animation: slideUp 0.25s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to   { transform: translateY(0); }
+    }
+    .modal-title {
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    canvas#receiptCanvas {
+      display: block;
+      border-radius: 12px;
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
+    .modal-actions { display: flex; gap: 8px; }
+    .btn-modal {
+      flex: 1;
+      padding: 13px;
+      border-radius: 50px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      font-size: 14px;
+      font-family: 'Kanit', sans-serif;
+      color: var(--text-sub);
+      cursor: pointer;
+      text-align: center;
+    }
+    .btn-modal.primary {
+      background: var(--orange);
+      border-color: var(--orange);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* ── Shake ── */
+    .shake { animation: shake 0.4s; }
+    @keyframes shake {
+      0%,100%{transform:translateX(0)}
+      20%{transform:translateX(-7px)}
+      40%{transform:translateX(7px)}
+      60%{transform:translateX(-5px)}
+      80%{transform:translateX(4px)}
+    }
+  </style>
+</head>
+<body>
+<div class="app" id="app" role="main">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="mascot" aria-hidden="true">🦊</div>
+    <h1 class="hero-title">วันนี้กินอะไรดี?</h1>
+    <p class="hero-sub">เลิกคิดให้ปวดหัว ปล่อยให้เป็นหน้าที่เรา</p>
+    <div class="streak-badge" id="streakBadge">🔥 1 วัน</div>
+  </div>
+
+  <!-- Filters -->
+  <div class="card">
+
+    <div class="card-section">
+      <div class="section-label">สัญชาติอาหาร</div>
+      <div class="chip-row">
+        <div class="chip active" data-group="cuisine" data-val="thai">🇹🇭 ไทย</div>
+        <div class="chip" data-group="cuisine" data-val="jp">🇯🇵 ญี่ปุ่น</div>
+        <div class="chip" data-group="cuisine" data-val="kr">🇰🇷 เกาหลี</div>
+        <div class="chip" data-group="cuisine" data-val="west">🍕 ตะวันตก</div>
+        <div class="chip" data-group="cuisine" data-val="all">🌍 รวมมิตร</div>
+      </div>
+    </div>
+
+    <div class="card-section">
+      <div class="section-label">งบประมาณ</div>
+      <div class="chip-row">
+        <div class="chip" data-group="budget" data-val="low">งบปกติ</div>
+        <div class="chip active" data-group="budget" data-val="mid">งบเยอะ</div>
+        <div class="chip" data-group="budget" data-val="high">งบเยอะมาก</div>
+        <div class="chip" data-group="budget" data-val="any">💸 ไม่เกี่ยงงบ</div>
+      </div>
+    </div>
+
+    <div class="card-section">
+      <div class="section-label">ฟีลลิ่ง <span>(เลือกได้หลายอย่าง)</span></div>
+      <div class="chip-row">
+        <div class="chip mood-chip" data-val="spicy">🌶️ แซ่บๆ</div>
+        <div class="chip mood-chip" data-val="soup">🍜 สายซด</div>
+        <div class="chip mood-chip" data-val="full">🍚 เน้นอิ่ม</div>
+        <div class="chip mood-chip" data-val="fried">🍟 ของทอด</div>
+        <div class="chip mood-chip active" data-val="any">🤷 อะไรก็ได้</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="card-section">
+      <div class="section-label">ตัวเลือกพิเศษ</div>
+      <div class="special-row">
+        <div class="special-chip" data-val="halal">☪️ ฮาลาล</div>
+        <div class="special-chip" data-val="vegan">🥬 วีแกน</div>
+        <div class="special-chip" data-val="protein">💪 High Protein</div>
+        <div class="special-chip" data-val="nomeat">🙏 ไม่กินเนื้อวัว</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-wrap">
+    <button class="btn-random" id="btnRandom">🎲 กดสุ่มเลย อย่าคิดเยอะ!</button>
+    <div class="roast-msg" id="roastBar" aria-live="polite"></div>
+    <div class="pool-msg" id="poolCount"></div>
+  </div>
+
+  <!-- Result -->
+  <div class="result-wrap" id="resultCard" aria-live="polite">
+    <div class="result-eyebrow">เมนูวันนี้ของคุณ</div>
+    <div class="result-name" id="resultMenu">—</div>
+    <div class="result-recommend" id="resultRecommend"></div>
+    <div class="result-roast" id="resultRoast"></div>
+    <div class="result-divider"></div>
+    <div class="result-meta">
+      <span id="resultCuisine">—</span>
+      <span id="resultBudget">—</span>
+    </div>
+    <div class="result-actions">
+      <div class="btn-action orange" id="btnShare">📸 Save / Share</div>
+      <div class="btn-action" id="btnMap">📍 หาร้านใกล้ฉัน</div>
+    </div>
+    <button class="btn-respin" id="btnRespin">🔄 ไม่เอาอะ... ขอสุ่มใหม่</button>
+  </div>
+
+  <div class="footer">วันนี้กินอะไรดี? · เมนู 60 รายการ · ออฟไลน์ได้ 100%</div>
+</div>
+
+<!-- Share Modal -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <div class="modal-title">📸 ใบเสร็จเมนูวันนี้</div>
+    <canvas id="receiptCanvas" width="600" height="860"></canvas>
+    <div class="modal-actions">
+      <div class="btn-modal" id="btnCloseModal">ปิด</div>
+      <div class="btn-modal primary" id="btnDownload">⬇️ บันทึกรูป</div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ── Data ─────────────────────────────────────────────────────────────────────
+// mood: spicy=เผ็ด, soup=มีน้ำซด, full=อิ่มจุก, fried=ของทอด
+// isNoMeat: true = ไม่มีเนื้อวัว (หมู/ไก่/ทะเล/ผักได้)
+const menus = [
+  // THAI งบปกติ
+  {name:"ข้าวกะเพราหมูกรอบ",recommend:"หมูกรอบเพิ่ม / ไข่ดาวกรอบ",cuisine:"thai",budget:"low",mood:["spicy","fried","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"เมนูสิ้นคิดระดับชาติ แต่เยียวยาทุกสิ่ง!"},
+  {name:"ข้าวกะเพราไก่",recommend:"ไก่สับ / ไก่ชิ้น / ไข่ดาว",cuisine:"thai",budget:"low",mood:["spicy","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"กะเพราไก่คือชีวิต ธรรมดาแต่ไม่เคยผิดหวัง"},
+  {name:"ข้าวผัดหมู/กุ้ง",recommend:"หมู / กุ้ง / ทะเล / ปู",cuisine:"thai",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"เมนูเซฟโซน กินๆ ไปเถอะจะได้มีแรงปั่นงานต่อ"},
+  {name:"ข้าวมันไก่ทอด",recommend:"ไก่ทอด / ไก่ต้มผสม",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"ไก่ทอดกรอบๆ กับข้าวมันอ่อนๆ ชีวิตพอแล้ว"},
+  {name:"ก๋วยเตี๋ยว",recommend:"เส้นใหญ่น้ำตก / ต้มยำ / เย็นตาโฟ",cuisine:"thai",budget:"low",mood:["soup","spicy"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"สั่งพิเศษไปเลย ชามเดียวมันจะไปอิ่มอะไร!"},
+  {name:"ก๋วยจั๊บ",recommend:"หมู / ไก่ / รวม",cuisine:"thai",budget:"low",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"เครื่องเทศหอมโชย น้ำซุปใสๆ แต่อร่อยสะใจ"},
+  {name:"ส้มตำไก่ย่าง",recommend:"ข้าวเหนียว / ไก่เพิ่ม",cuisine:"thai",budget:"low",mood:["spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"แซ่บจนลืมทุกข์ ลืมชีวิต ลืมเป้าหมาย"},
+  {name:"ข้าวไข่เจียวทรงเครื่อง",recommend:"หมูสับ / กุ้งสับ / แหนม",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"วันสบายๆ หรือเงินหมด เอาดีๆ?"},
+  {name:"โจ๊กหมูสับ",recommend:"ใส่ไข่เยี่ยวม้า / ขิงซอย",cuisine:"thai",budget:"low",mood:["soup"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"ฟีลคนป่วย หรือแค่ไม่อยากเคี้ยว เอาดีๆ?"},
+  {name:"ข้าวต้ม",recommend:"ปลา / ทะเล / หมู / กุ้ง",cuisine:"thai",budget:"low",mood:["soup","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"กินคลีนๆ ล้างบาปบ้าง เดี๋ยวหมอจะด่าเอา"},
+  {name:"ผัดไทยกุ้งสด",recommend:"กุ้งสด / ไก่ / เต้าหู้",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"เส้นจันท์เหนียวนุ่ม กับน้ำมันฉ่ำๆ อ้วนช่างมัน!"},
+  {name:"ราดหน้า",recommend:"หมูหมัก / ทะเล / เต้าหู้",cuisine:"thai",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"น้ำหนืดๆ หวานๆ ยอมกินผักบ้างนะวัยรุ่น"},
+  {name:"ข้าวหมกไก่",recommend:"ไก่ต้ม / น้ำจิ้ม",cuisine:"thai",budget:"low",mood:["spicy","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"หอมเครื่องเทศทะลุจอ ระวังข้าวติดคอนะวัยรุ่น"},
+  {name:"ไก่ทอดหาดใหญ่",recommend:"ไก่ทอด / ข้าวเหนียว",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"กรอบนอกนุ่มในตำนาน ไม่มีเหตุผลต้องอธิบาย"},
+  {name:"ผัดผักเต้าหู้",recommend:"เต้าหู้ทอด / เต้าหู้แข็ง",cuisine:"thai",budget:"low",mood:["full"],isHalal:true,isVegan:true,isHighProtein:false,isNoMeat:true,roast:"กินดีมีสุข กินเจยิ่งมีบุญ"},
+  // THAI งบเยอะ
+  {name:"หมูกระทะ",recommend:"สามชั้น / คอหมู / หมูสันนอก",cuisine:"thai",budget:"mid",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"กลิ่นติดยันชาติหน้า แต่วันนี้กูต้องได้กิน!"},
+  {name:"ชาบู / หม่าล่า",recommend:"เนื้อ / หมู / ทะเล / ผัก",cuisine:"thai",budget:"mid",mood:["soup","spicy","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,roast:"หยิบเพลินๆ ระวังตอนจ่ายตังค์หน้าซีดนะจ๊ะ"},
+  {name:"อาหารทะเลเผา",recommend:"กุ้งแม่น้ำ / ปูนิ่ม / หอยแมลงภู่",cuisine:"thai",budget:"mid",mood:["spicy","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"กุ้งแม่น้ำตัวโตๆ น้ำจิ้มซีฟู้ดแซ่บๆ โคตรฟิน"},
+  {name:"ข้าวซอย",recommend:"เนื้อเปื่อย / ไก่ / ทะเล",cuisine:"thai",budget:"mid",mood:["soup","spicy","full"],isHalal:true,isVegan:false,isHighProtein:false,isNoMeat:false,roast:"ซู้ดเส้นกรอบๆ ให้ดังไปถึงเชียงใหม่!"},
+  {name:"ข้าวปลากะพง",recommend:"ราดน้ำปลา / ผัดพริกเกลือ",cuisine:"thai",budget:"mid",mood:["spicy","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"ปลาเน้นๆ เค็มๆ หวานๆ กินข้าวมดหม้อแน่นอน"},
+  {name:"ลาบหมู",recommend:"หมูสับ / ข้าวเหนียว",cuisine:"thai",budget:"mid",mood:["spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"สายอีสานต้องได้ลาบ จะกินเที่ยงหรือดึกก็แซ่บ"},
+  {name:"ต้มแซ่บซี่โครงหมู",recommend:"ซี่โครงหมู / ใส่ผัก",cuisine:"thai",budget:"mid",mood:["soup","spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"น้ำซุปแดงเดือดพล่าน เผ็ดแล้วยังจะสั่งเพิ่มอีก"},
+  {name:"ต้มยำกุ้ง",recommend:"กุ้งสด / ซีฟู้ด / น้ำข้น",cuisine:"thai",budget:"mid",mood:["soup","spicy"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"เปรี้ยวเผ็ดหอมตะไคร้ใบมะกรูด ฝรั่งกินแล้วร้อง wow"},
+  // THAI งบเยอะมาก
+  {name:"บุฟเฟต์ซีฟู้ดพรีเมียม",recommend:"ล็อบสเตอร์ / ปูอลาสก้า / หอยเชลล์",cuisine:"thai",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"กินให้คุ้มนะ ไม่งั้นเสียดายตังค์ยันปีหน้า!"},
+  {name:"ปูไข่ดองพรีเมียม",recommend:"ปูดองซีอิ๊ว / กุ้งดองเกาหลี",cuisine:"thai",budget:"high",mood:["spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"ดูดปูให้เสียงดัง! ระวังจู๊ดๆ พรุ่งนี้นะวัยรุ่น"},
+  {name:"Fine Seafood",recommend:"กุ้งล็อบสเตอร์เผา / ปูม้านึ่ง",cuisine:"thai",budget:"high",mood:["full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"ทะเลสดๆ ราคาแพงๆ แต่ถ่ายรูปลง IG คุ้มมาก"},
+  // JAPANESE งบปกติ
+  {name:"ยากิโซบะ",recommend:"หมู / ซีฟู้ด / ผัก",cuisine:"jp",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"เส้นผัดซอสเข้มๆ กินทั้งกระทะยังไม่พอ"},
+  {name:"โอนิกิริ",recommend:"ทูน่า / แซลมอน / อูเมะ",cuisine:"jp",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"กินง่ายพกสะดวก แต่ทำเองนี่สิ มือเป็นข้าวทั้งวัน"},
+  {name:"กิวดอน",recommend:"เนื้อบาง / ไข่ออนเซ็น / ชีส",cuisine:"jp",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,roast:"Yoshinoya level แต่รสชาติไม่ธรรมดา กินหมดชามแป๊บเดียว"},
+  // JAPANESE งบเยอะ
+  {name:"ราเมน",recommend:"ทงคตสึ / โชยุ / มิโซะ / ซิโอะ",cuisine:"jp",budget:"mid",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"ซู้ดเส้นให้ดังๆ จะได้รู้ว่าวิญญาณคนญี่ปุ่นเข้าสิง"},
+  {name:"ทงคตสึ",recommend:"ซี่โครง / สันนอก / ฮิเระ",cuisine:"jp",budget:"mid",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"หมูทอดกรอบๆ กินกับซอสทงคตสึ ชีวิตพอแล้ว"},
+  {name:"เทมปุระ",recommend:"กุ้ง / ผัก / ปลา / มิกซ์",cuisine:"jp",budget:"mid",mood:["fried"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"ชุบแป้งทอดทุกอย่างแล้วมันก็อร่อยทุกอย่าง จริงไหม?"},
+  {name:"ซูชิสายพาน",recommend:"ซาลมอน / ทูน่า / อีล",cuisine:"jp",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"จานละนิดจานละหน่อย รวมกันทีจ่ายเป็นพัน"},
+  {name:"อุด้ง / โซบะ",recommend:"เย็น / ร้อน / น้ำ / แห้ง",cuisine:"jp",budget:"mid",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"เส้นหนาเหนียวนุ่ม เคี้ยวให้ช้าๆ อย่ารีบชีวิต"},
+  {name:"ดอนบุริ",recommend:"คัตสึดอน / โอยาโกดอน",cuisine:"jp",budget:"mid",mood:["full","fried"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"ข้าวหน้าอะไรก็อิ่มหมัด กินเสร็จแล้วง่วงนอน"},
+  // JAPANESE งบเยอะมาก
+  {name:"โอมากาเสะ",recommend:"ฝากเชฟจัดให้เต็มที่",cuisine:"jp",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"รวยนักก็จัดไป! ให้เชฟปั้นข้าวให้กินหล่อๆ"},
+  {name:"ชาบูพรีเมียม",recommend:"Haidilao / Mo-Mo / Suki Masa",cuisine:"jp",budget:"high",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,roast:"บริการทุกระดับประทับใจ เงินในกระเป๋าหายวับ!"},
+  {name:"เนื้อวากิวย่าง",recommend:"A5 / ดรายเอจ / ริบอาย",cuisine:"jp",budget:"high",mood:["full","fried"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,roast:"ละลายในปาก และเงินก็ละลายในกระเป๋าด้วย"},
+  // KOREAN งบปกติ
+  {name:"ต็อกบกกี",recommend:"ซอสแดง / ชีส / โรเซ่",cuisine:"kr",budget:"low",mood:["spicy","full"],isHalal:false,isVegan:true,isHighProtein:false,isNoMeat:true,roast:"เผ็ดหวานเหนียวนุ่ม กินคนเดียวหมดหม้อไม่รู้ตัว"},
+  {name:"จาจังมยอน",recommend:"ซอสดำ / ใส่ไข่ดาว",cuisine:"kr",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"เส้นดำๆ น่ากลัว แต่กินแล้วติดใจไม่รู้ลืม"},
+  {name:"บะหมี่เกาหลี",recommend:"ซินราเมน / บูลดัก / จินราเมน",cuisine:"kr",budget:"low",mood:["soup","spicy"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"1 ห่อ 30 บาท แต่อร่อยสู้ร้านหลายร้านได้เลย"},
+  // KOREAN งบเยอะ
+  {name:"ไก่ทอดเกาหลี",recommend:"ซอสฮันยัง / ครีมชีส / ออริจินัล",cuisine:"kr",budget:"mid",mood:["fried","spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"กรอบยันเงา กินคู่กับไชเท้าดองคือฟิน!"},
+  {name:"ปิ้งย่างเกาหลี",recommend:"สามชั้น / คอหมู / ซัมเกียบซัล",cuisine:"kr",budget:"mid",mood:["full","fried"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"สามชั้นเกรียมๆ ห่อผักสไตล์โอปป้า ฟินสุด!"},
+  {name:"บิบิมบับ",recommend:"ไข่ดาว / เนื้อสับ / เต้าหู้",cuisine:"kr",budget:"mid",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:false,roast:"คนเกาหลีกินทุกวันแล้วยังหุ่นดี ชีวิตไม่ยุติธรรม"},
+  {name:"ทตโพกีสตรีท",recommend:"ทตโพกี / ซุนแด / โอเด้ง",cuisine:"kr",budget:"mid",mood:["spicy","soup"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"แดก้อนมาแล้วพวกนี้ กินทั้งคืนยังไม่อิ่มใจ"},
+  {name:"ซุนดูบูจิเก",recommend:"เต้าหู้นิ่ม / หอย / หมู",cuisine:"kr",budget:"mid",mood:["soup","spicy","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"ซุปเต้าหู้เดือดพล่าน เผ็ดพอแล้วหยุดก็ยังซดต่อ"},
+  {name:"คิมบับ",recommend:"ทูน่า / ไข่ / หมู / ผัก",cuisine:"kr",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"โรลง่ายๆ กินไวๆ แต่ทำเองนี่สิยากกว่าที่คิด"},
+  // KOREAN งบเยอะมาก
+  {name:"ปูไข่ดองเกาหลี",recommend:"ปูดองซีอิ๊ว / ซอสเผ็ด",cuisine:"kr",budget:"high",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"ข้าวโจรที่แพงที่สุดในจักรวาล แต่ก็ยังสั่งเพิ่ม"},
+  {name:"บุฟเฟต์เกาหลีพรีเมียม",recommend:"หมูคุโรบูตะ / เนื้อวากิว / ทะเล",cuisine:"kr",budget:"high",mood:["full","fried"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,roast:"จ่ายครั้งเดียวกินได้ทั้งคืน คุ้มถ้าท้องไม่รู้จักแพ้"},
+  // WESTERN งบปกติ
+  {name:"เบอร์เกอร์ฟาสต์ฟู้ด",recommend:"McDonald's / Burger King / MOS",cuisine:"west",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,roast:"ไม่ต้องคิดมาก เดินเข้าร้านสั่งเลย ชีวิตง่ายงี้แหละ"},
+  {name:"เคบับ / ชาวาม่า",recommend:"ไก่ / เนื้อ / ผักรวม",cuisine:"west",budget:"low",mood:["full","spicy"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:false,roast:"อาหารริมทางที่ทำให้รู้สึกว่าอยู่ตะวันออกกลาง"},
+  {name:"แซนด์วิช / ซับมารีน",recommend:"BLT / คลับ / ทูน่า / Subway",cuisine:"west",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"อาหารที่แค่หนีบไปกัดก็ดูมีชีวิตขึ้นมาทันที"},
+  // WESTERN งบเยอะ
+  {name:"พิซซ่า",recommend:"ฮาวายเอียน / เปปเปอโรนี / ซีฟู้ด",cuisine:"west",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"สั่งถาดใหญ่ไปเลย กินไม่หมดพรุ่งนี้ค่อยเวฟ"},
+  {name:"เบอร์เกอร์",recommend:"ชีสเบอร์เกอร์ / เบคอน / มัชรูม",cuisine:"west",budget:"mid",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,roast:"รีบกิน รีบอ้วน ชีวิตมันสั้น!"},
+  {name:"สเต็กหมู/ไก่",recommend:"สเต็กหมู / ไก่กริลล์ / ซอสมัสตาร์ด",cuisine:"west",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"สเต็กไม่ต้องเป็นเนื้อก็อร่อยได้ เชื่อเรา"},
+  {name:"พาสต้า",recommend:"คาร์โบนาร่า / อาราเบียต้า / วองโกเล",cuisine:"west",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"ม้วนเส้นให้เป็นแล้วค่อยกิน จะได้ดูมีคลาส"},
+  {name:"ไก่ทอดฟาสต์ฟู้ด",recommend:"KFC / Popeyes / MOS Chicken",cuisine:"west",budget:"mid",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"Fast food เร็วทั้งกิน เร็วทั้งอ้วน ชีวิต efficient มาก"},
+  // WESTERN งบเยอะมาก
+  {name:"สเต็กเนื้อวัวดรายเอจ",recommend:"Tomahawk / Ribeye / T-Bone",cuisine:"west",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,roast:"สายเนื้อต้องโดน จ่ายแพงทั้งทีต้องเอาให้สุด"},
+  {name:"Fine Dining",recommend:"ฝากเชฟจัดให้เต็มที่",cuisine:"west",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:false,roast:"กินเอาคอนเทนต์ จานใหญ่แต่อาหารกระจึ๋งนึง"},
+];
+
+// ── Constants ────────────────────────────────────────────────────────────────
+const ROAST_MSGS = [
+  "",
+  "อ้าว ไม่ชอบเหรอ ลองอีกทีก็ได้นะ...",
+  "ยังอยู่อีกเหรอ? โอเค โอเค...",
+  "เลือกมากนักนะวัยรุ่น! 😤",
+  "ยังกดอยู่อีกเหรอ?!",
+  "ถ้าจะข้ามขนาดนี้ ไปต้มมาม่ากินไปซะ! 🍜"
+];
+const BUDGET_LABEL  = {low:'งบปกติ', mid:'งบเยอะ', high:'งบเยอะมาก', any:'ไม่เกี่ยงงบ'};
+const CUISINE_LABEL = {thai:'🇹🇭 ไทย', jp:'🇯🇵 ญี่ปุ่น', kr:'🇰🇷 เกาหลี', west:'🍕 ตะวันตก'};
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let filters      = {cuisine: 'thai', budget: 'mid'};
+let selectedMoods = new Set();
+let specials      = new Set();
+let clickCount    = 0;
+let currentPick   = null;
+
+// ── Streak ───────────────────────────────────────────────────────────────────
+function initStreak() {
+  const today     = new Date().toDateString();
+  const lastVisit = localStorage.getItem('eat_last_visit');
+  let streak      = parseInt(localStorage.getItem('eat_streak') || '0');
+
+  if (lastVisit === today) {
+    // same day — no change
+  } else if (lastVisit === new Date(Date.now() - 86400000).toDateString()) {
+    streak++;
+  } else {
+    streak = 1;
+  }
+  localStorage.setItem('eat_streak', streak);
+  localStorage.setItem('eat_last_visit', today);
+  document.getElementById('streakBadge').textContent = `🔥 ${streak} วัน`;
+}
+
+// ── Pool ─────────────────────────────────────────────────────────────────────
+function getPool() {
+  return menus.filter(m => {
+    if (filters.cuisine !== 'all' && m.cuisine !== filters.cuisine) return false;
+    if (filters.budget  !== 'any' && m.budget  !== filters.budget)  return false;
+    if (selectedMoods.size > 0 && ![...selectedMoods].some(md => m.mood.includes(md))) return false;
+    if (specials.has('halal')   && !m.isHalal)       return false;
+    if (specials.has('vegan')   && !m.isVegan)        return false;
+    if (specials.has('protein') && !m.isHighProtein)  return false;
+    if (specials.has('nomeat')  && !m.isNoMeat)       return false;
+    return true;
+  });
+}
+
+function updatePoolCount() {
+  const n = getPool().length;
+  document.getElementById('poolCount').textContent =
+    n > 0 ? `มีเมนูให้สุ่ม ${n} รายการ` : 'ไม่พบเมนูที่ตรง — จะสุ่มจากทั้งหมดแทน';
+}
+
+// ── Spin ─────────────────────────────────────────────────────────────────────
+function doSpin() {
+  clickCount++;
+  document.getElementById('roastBar').textContent =
+    ROAST_MSGS[Math.min(clickCount, ROAST_MSGS.length - 1)];
+
+  if (clickCount >= 5) {
+    const app = document.getElementById('app');
+    app.classList.add('shake');
+    setTimeout(() => app.classList.remove('shake'), 500);
+  }
+
+  let pool = getPool();
+  if (!pool.length) pool = menus;
+  currentPick = pool[Math.floor(Math.random() * pool.length)];
+
+  document.getElementById('resultMenu').textContent      = currentPick.name;
+  document.getElementById('resultRecommend').textContent = currentPick.recommend ? `แนะนำ: ${currentPick.recommend}` : '';
+  document.getElementById('resultRoast').textContent     = `"${currentPick.roast}"`;
+  document.getElementById('resultCuisine').textContent   = CUISINE_LABEL[currentPick.cuisine] || currentPick.cuisine;
+  document.getElementById('resultBudget').textContent    = BUDGET_LABEL[currentPick.budget];
+
+  const card = document.getElementById('resultCard');
+  card.classList.add('show');
+  card.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+
+  document.getElementById('btnMap').onclick = () => {
+    window.open(`https://www.google.com/maps/search/${encodeURIComponent(currentPick.name)}+ใกล้ฉัน`, '_blank');
+  };
+}
+
+// ── Canvas Receipt ────────────────────────────────────────────────────────────
+function drawReceipt(pick) {
+  const canvas = document.getElementById('receiptCanvas');
+  const ctx    = canvas.getContext('2d');
+  const W = 600, H = 860;
+  canvas.width  = W;
+  canvas.height = H;
+
+  const ORANGE      = '#FF7043';
+  const ORANGE_DARK = '#F4511E';
+  const BLACK       = '#1A1A1A';
+  const GRAY        = '#888888';
+  const LIGHT       = '#F5F5F3';
+  const WHITE       = '#FFFFFF';
+
+  const now     = new Date();
+  const dateStr = now.toLocaleDateString('th-TH', {day:'2-digit', month:'short', year:'2-digit'});
+  const timeStr = now.toLocaleTimeString('th-TH', {hour:'2-digit', minute:'2-digit'});
+  const orderId = 'EAT-' + Math.floor(Math.random() * 90000 + 10000);
+
+  // BG
+  ctx.fillStyle = WHITE;
+  ctx.fillRect(0, 0, W, H);
+
+  // Header bar
+  ctx.fillStyle = ORANGE;
+  ctx.fillRect(0, 0, W, 150);
+
+  // Header text
+  ctx.fillStyle   = WHITE;
+  ctx.textAlign   = 'center';
+  ctx.font        = 'bold 20px sans-serif';
+  ctx.fillText('วันนี้กินอะไรดี? 🦊', W / 2, 52);
+  ctx.font        = '14px sans-serif';
+  ctx.fillStyle   = 'rgba(255,255,255,0.85)';
+  ctx.fillText('MEAL RECEIPT', W / 2, 80);
+  ctx.font        = '12px sans-serif';
+  ctx.fillText(`${dateStr}  ${timeStr}`, W / 2, 108);
+  ctx.fillText(orderId, W / 2, 130);
+
+  // Dashed line helper
+  function dash(x1, y1, x2, y2) {
+    ctx.save();
+    ctx.setLineDash([8, 6]);
+    ctx.strokeStyle = '#CCC';
+    ctx.lineWidth   = 1.5;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    ctx.restore();
+  }
+
+  dash(30, 162, W - 30, 162);
+
+  // Eyebrow
+  ctx.fillStyle = GRAY;
+  ctx.font      = '13px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('เมนูที่ระบบสุ่มให้คุณ', W / 2, 192);
+
+  // Menu name — wrap if needed
+  ctx.font      = 'bold 48px sans-serif';
+  ctx.fillStyle = BLACK;
+  const maxW    = W - 60;
+  let menuLines = [];
+  if (ctx.measureText(pick.name).width > maxW) {
+    const mid = Math.ceil(pick.name.length / 2);
+    menuLines = [pick.name.slice(0, mid), pick.name.slice(mid)];
+  } else {
+    menuLines = [pick.name];
+  }
+  menuLines.forEach((l, i) => ctx.fillText(l, W / 2, 256 + i * 56));
+  const nameBottom = 256 + (menuLines.length - 1) * 56;
+
+  // Recommend
+  if (pick.recommend) {
+    ctx.font      = '15px sans-serif';
+    ctx.fillStyle = ORANGE;
+    ctx.fillText(`แนะนำ: ${pick.recommend}`, W / 2, nameBottom + 44);
+  }
+
+  const sep1 = nameBottom + 70;
+  dash(30, sep1, W - 30, sep1);
+
+  // Meta rows
+  const tableTop = sep1 + 28;
+  const rows = [
+    ['สัญชาติอาหาร', CUISINE_LABEL[pick.cuisine] || pick.cuisine],
+    ['งบประมาณ',     BUDGET_LABEL[pick.budget]],
+    ['เวลาสุ่ม',     timeStr],
+  ];
+  ctx.font = '14px sans-serif';
+  rows.forEach((row, i) => {
+    const y = tableTop + i * 38;
+    ctx.textAlign = 'left';  ctx.fillStyle = GRAY;  ctx.fillText(row[0], 50, y);
+    ctx.textAlign = 'right'; ctx.fillStyle = BLACK; ctx.fillText(row[1], W - 50, y);
+  });
+
+  const sep2 = tableTop + rows.length * 38 + 18;
+  dash(30, sep2, W - 30, sep2);
+
+  // Roast box
+  ctx.fillStyle = LIGHT;
+  ctx.beginPath();
+  ctx.roundRect(40, sep2 + 14, W - 80, 88, 12);
+  ctx.fill();
+
+  ctx.font      = 'italic 13px sans-serif';
+  ctx.fillStyle = '#555';
+  ctx.textAlign = 'center';
+  const roastWords = `"${pick.roast}"`.split('');
+  let line = '', lines = [];
+  roastWords.forEach(ch => {
+    if (ctx.measureText(line + ch).width > W - 130 && line) { lines.push(line); line = ch; }
+    else line += ch;
+  });
+  lines.push(line);
+  lines.forEach((l, i) => ctx.fillText(l, W / 2, sep2 + 50 + i * 24));
+
+  const sep3 = sep2 + 120;
+  dash(30, sep3, W - 30, sep3);
+
+  // Footer
+  ctx.fillStyle = ORANGE;
+  ctx.font      = 'bold 16px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('ไม่รู้จะกินอะไร ให้เราสุ่มให้!', W / 2, sep3 + 38);
+
+  ctx.fillStyle = GRAY;
+  ctx.font      = '12px sans-serif';
+  ctx.fillText('whattoeat.app', W / 2, sep3 + 62);
+
+  // Barcode (decorative)
+  const bcY = sep3 + 82;
+  ctx.fillStyle = BLACK;
+  const bars = [3,1,2,1,3,2,1,2,1,3,2,1,2,3,1,2,1,3,2,1,2,1,3];
+  let bx = W / 2 - 92;
+  bars.forEach((bw, i) => {
+    if (i % 2 === 0) ctx.fillRect(bx, bcY, bw * 4, 48);
+    bx += bw * 4;
+  });
+  ctx.font      = '11px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = BLACK;
+  ctx.fillText(orderId, W / 2, bcY + 64);
+
+  ctx.fillStyle = ORANGE;
+  ctx.font      = '24px sans-serif';
+  ctx.fillText('* * *', W / 2, bcY + 92);
+}
+
+// ── Event Listeners ──────────────────────────────────────────────────────────
+document.querySelectorAll('.chip[data-group]').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll(`.chip[data-group="${c.dataset.group}"]`).forEach(x => x.classList.remove('active'));
+    c.classList.add('active');
+    filters[c.dataset.group] = c.dataset.val;
+    clickCount = 0;
+    document.getElementById('roastBar').textContent = '';
+    updatePoolCount();
+  });
+});
+
+document.querySelectorAll('.mood-chip').forEach(c => {
+  c.addEventListener('click', () => {
+    const val  = c.dataset.val;
+    const anyC = document.querySelector('.mood-chip[data-val="any"]');
+    if (val === 'any') {
+      selectedMoods.clear();
+      document.querySelectorAll('.mood-chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+    } else {
+      anyC.classList.remove('active');
+      if (c.classList.contains('active')) {
+        c.classList.remove('active'); selectedMoods.delete(val);
+        if (!selectedMoods.size) anyC.classList.add('active');
+      } else {
+        c.classList.add('active'); selectedMoods.add(val);
+      }
+    }
+    clickCount = 0;
+    document.getElementById('roastBar').textContent = '';
+    updatePoolCount();
+  });
+});
+
+document.querySelectorAll('.special-chip').forEach(c => {
+  c.addEventListener('click', () => {
+    c.classList.toggle('active');
+    if (c.classList.contains('active')) specials.add(c.dataset.val);
+    else specials.delete(c.dataset.val);
+    updatePoolCount();
+  });
+});
+
+document.getElementById('btnRandom').addEventListener('click', doSpin);
+document.getElementById('btnRespin').addEventListener('click', doSpin);
+
+document.getElementById('btnShare').addEventListener('click', () => {
+  if (!currentPick) return;
+  drawReceipt(currentPick);
+  document.getElementById('modalBg').classList.add('show');
+});
+
+document.getElementById('btnCloseModal').addEventListener('click', () => {
+  document.getElementById('modalBg').classList.remove('show');
+});
+
+document.getElementById('modalBg').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalBg'))
+    document.getElementById('modalBg').classList.remove('show');
+});
+
+document.getElementById('btnDownload').addEventListener('click', () => {
+  if (!currentPick) return;
+  drawReceipt(currentPick);
+  const a  = document.createElement('a');
+  a.download = `กินอะไรดี-${currentPick.name}.png`;
+  a.href     = document.getElementById('receiptCanvas').toDataURL('image/png');
+  a.click();
+});
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+initStreak();
+updatePoolCount();
+</script>
+</body>
+</html>
