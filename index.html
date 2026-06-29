@@ -18,19 +18,23 @@
       --orange-dark:  #F4511E;
       --orange-light: #FFF3F0;
       --orange-mid:   #FFD0C4;
-      --bg:           #F7F7F5;
+      --bg:           #FFF4EE;
       --white:        #FFFFFF;
       --border:       rgba(0,0,0,0.08);
       --border-strong:rgba(0,0,0,0.14);
       --text:         #1A1A1A;
       --text-sub:     #666666;
       --text-muted:   #999999;
-      --surface:      #F0F0EE;
+      --surface:      #F5F1EE;
+      --page-bg:      radial-gradient(125% 65% at 50% 0%, #FFEFE6 0%, rgba(255,239,230,0) 58%),
+                      linear-gradient(180deg, #FFF8F4 0%, #FFEDE3 55%, #FFE7DB 100%);
+      --card-shadow:  0 10px 30px rgba(244,81,30,0.07);
     }
     html { background: var(--bg); }
     body {
       font-family: 'Kanit', sans-serif;
-      background: var(--bg);
+      background: var(--page-bg);
+      background-attachment: fixed;
       min-height: 100dvh;
       color: var(--text);
       -webkit-tap-highlight-color: transparent;
@@ -48,7 +52,12 @@
       text-align: center;
       padding: 2.5rem 1.5rem 1rem;
     }
-    .mascot { font-size: 56px; line-height: 1; margin-bottom: 0.75rem; }
+    .mascot {
+      font-size: 62px;
+      line-height: 1;
+      margin-bottom: 0.75rem;
+      filter: drop-shadow(0 8px 12px rgba(244,81,30,0.18));
+    }
     .hero-title {
       font-size: 26px;
       font-weight: 600;
@@ -81,7 +90,7 @@
       margin: 0 1rem 0;
       padding: 1.5rem 1.25rem;
       border: 1px solid var(--border);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      box-shadow: var(--card-shadow);
     }
     .card-section { margin-bottom: 1.25rem; }
     .card-section:last-child { margin-bottom: 0; }
@@ -126,6 +135,16 @@
       color: #fff;
       font-weight: 500;
     }
+    /* Flag icon inside cuisine chips */
+    .flag {
+      width: 21px;
+      height: 14px;
+      border-radius: 3px;
+      vertical-align: -2px;
+      margin-right: 6px;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.12);
+    }
+    .chip.active .flag { box-shadow: 0 0 0 1.5px rgba(255,255,255,0.9); }
 
     /* ── Special chips (dashed) ── */
     .special-row { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -158,8 +177,8 @@
     .cta-wrap { padding: 1.25rem 1rem 0; }
     .btn-random {
       width: 100%;
-      padding: 17px;
-      background: var(--orange);
+      padding: 19px;
+      background: linear-gradient(135deg, #FF8A5B 0%, #F4511E 100%);
       color: #fff;
       border: none;
       border-radius: 50px;
@@ -169,10 +188,10 @@
       cursor: pointer;
       transition: all 0.15s ease;
       letter-spacing: 0.2px;
-      box-shadow: 0 4px 16px rgba(255,112,67,0.35);
+      box-shadow: 0 12px 26px rgba(244,81,30,0.34);
     }
-    .btn-random:hover { background: var(--orange-dark); box-shadow: 0 4px 20px rgba(255,112,67,0.45); }
-    .btn-random:active { transform: scale(0.98); box-shadow: none; }
+    .btn-random:hover { box-shadow: 0 14px 30px rgba(244,81,30,0.42); transform: translateY(-1px); }
+    .btn-random:active { transform: scale(0.98); box-shadow: 0 6px 16px rgba(244,81,30,0.3); }
 
     .roast-msg {
       text-align: center;
@@ -198,7 +217,7 @@
       border: 1px solid var(--border);
       padding: 1.75rem 1.5rem 1.5rem;
       display: none;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      box-shadow: var(--card-shadow);
       animation: fadeUp 0.25s ease;
     }
     .result-wrap.show { display: block; }
@@ -310,6 +329,8 @@
       padding: 1.5rem 1.5rem 2.5rem;
       width: 100%;
       max-width: 430px;
+      max-height: 92vh;
+      overflow-y: auto;
       animation: slideUp 0.25s ease;
     }
     @keyframes slideUp {
@@ -324,11 +345,12 @@
     }
     canvas#receiptCanvas {
       display: block;
-      border-radius: 12px;
-      width: 100%;
+      border-radius: 16px;
+      width: auto;
       height: auto;
-      border: 1px solid var(--border);
-      margin-bottom: 1rem;
+      max-width: 100%;
+      max-height: 62vh;
+      margin: 0 auto 1rem;
     }
     .modal-actions { display: flex; gap: 8px; }
     .btn-modal {
@@ -348,6 +370,53 @@
       border-color: var(--orange);
       color: #fff;
       font-weight: 600;
+    }
+
+    /* ── Loading Overlay ── */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--page-bg);
+      background-attachment: fixed;
+      z-index: 200;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+    .loading-overlay.show { display: flex; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .loading-emoji {
+      font-size: 84px;
+      line-height: 1;
+      filter: drop-shadow(0 10px 16px rgba(244,81,30,0.22));
+      animation: bob 0.85s ease-in-out infinite;
+    }
+    @keyframes bob {
+      0%,100% { transform: translateY(0) rotate(-6deg); }
+      50%     { transform: translateY(-18px) rotate(6deg); }
+    }
+    .loading-text {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+      text-align: center;
+    }
+    .loading-dots { display: flex; gap: 9px; }
+    .loading-dots span {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--orange);
+      animation: dotPulse 1s ease-in-out infinite;
+    }
+    .loading-dots span:nth-child(2) { animation-delay: 0.15s; }
+    .loading-dots span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes dotPulse {
+      0%,100% { opacity: 0.3; transform: scale(0.7); }
+      50%     { opacity: 1;   transform: scale(1.15); }
     }
 
     /* ── Shake ── */
@@ -378,9 +447,9 @@
     <div class="card-section">
       <div class="section-label">สัญชาติอาหาร</div>
       <div class="chip-row">
-        <div class="chip active" data-group="cuisine" data-val="thai">🇹🇭 ไทย</div>
-        <div class="chip" data-group="cuisine" data-val="jp">🇯🇵 ญี่ปุ่น</div>
-        <div class="chip" data-group="cuisine" data-val="kr">🇰🇷 เกาหลี</div>
+        <div class="chip active" data-group="cuisine" data-val="thai"><svg class="flag" viewBox="0 0 21 14" aria-hidden="true"><rect width="21" height="14" fill="#ED1C24"/><rect y="2.33" width="21" height="9.33" fill="#fff"/><rect y="4.67" width="21" height="4.67" fill="#241D4F"/></svg>ไทย</div>
+        <div class="chip" data-group="cuisine" data-val="jp"><svg class="flag" viewBox="0 0 21 14" aria-hidden="true"><rect width="21" height="14" fill="#fff"/><circle cx="10.5" cy="7" r="3.9" fill="#BC002D"/></svg>ญี่ปุ่น</div>
+        <div class="chip" data-group="cuisine" data-val="kr"><svg class="flag" viewBox="0 0 21 14" aria-hidden="true"><rect width="21" height="14" fill="#fff"/><path d="M10.5 3.1 a3.9 3.9 0 0 1 0 7.8 a1.95 1.95 0 0 1 0 -3.9 a1.95 1.95 0 0 0 0 -3.9 z" fill="#CD2E3A"/><path d="M10.5 3.1 a3.9 3.9 0 0 0 0 7.8 a1.95 1.95 0 0 0 0 -3.9 a1.95 1.95 0 0 1 0 -3.9 z" fill="#0047A0"/></svg>เกาหลี</div>
         <div class="chip" data-group="cuisine" data-val="west">🍕 ตะวันตก</div>
         <div class="chip" data-group="cuisine" data-val="all">🌍 รวมมิตร</div>
       </div>
@@ -453,12 +522,19 @@
 <div class="modal-bg" id="modalBg">
   <div class="modal">
     <div class="modal-title">📸 ใบเสร็จเมนูวันนี้</div>
-    <canvas id="receiptCanvas" width="600" height="860"></canvas>
+    <canvas id="receiptCanvas" width="600" height="1040"></canvas>
     <div class="modal-actions">
       <div class="btn-modal" id="btnCloseModal">ปิด</div>
       <div class="btn-modal primary" id="btnDownload">⬇️ บันทึกรูป</div>
     </div>
   </div>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay" aria-live="polite" aria-label="กำลังสุ่มเมนู">
+  <div class="loading-emoji" aria-hidden="true">🍱</div>
+  <div class="loading-text">กำลังสุ่มเมนูเด็ดให้คุณ...</div>
+  <div class="loading-dots" aria-hidden="true"><span></span><span></span><span></span></div>
 </div>
 
 <script>
@@ -614,6 +690,17 @@ function doSpin() {
   if (!pool.length) pool = menus;
   currentPick = pool[Math.floor(Math.random() * pool.length)];
 
+  // Loading transition → reveal result
+  const overlay = document.getElementById('loadingOverlay');
+  overlay.classList.add('show');
+  clearTimeout(doSpin._timer);
+  doSpin._timer = setTimeout(() => {
+    overlay.classList.remove('show');
+    revealResult();
+  }, 900);
+}
+
+function revealResult() {
   document.getElementById('resultMenu').textContent      = currentPick.name;
   document.getElementById('resultRecommend').textContent = currentPick.recommend ? `แนะนำ: ${currentPick.recommend}` : '';
   document.getElementById('resultRoast').textContent     = `"${currentPick.roast}"`;
@@ -633,149 +720,195 @@ function doSpin() {
 function drawReceipt(pick) {
   const canvas = document.getElementById('receiptCanvas');
   const ctx    = canvas.getContext('2d');
-  const W = 600, H = 860;
+  const W = 600, H = 1040;
   canvas.width  = W;
   canvas.height = H;
 
   const ORANGE      = '#FF7043';
   const ORANGE_DARK = '#F4511E';
   const BLACK       = '#1A1A1A';
-  const GRAY        = '#888888';
-  const LIGHT       = '#F5F5F3';
+  const GRAY        = '#8A857F';
+  const LIGHT       = '#FBF0E9';
   const WHITE       = '#FFFFFF';
+  const PAGE        = '#FBEDE4';
+  const f = (w, s) => `${w} ${s}px Kanit, sans-serif`;   // font helper (Kanit weights 400/500/600)
 
   const now     = new Date();
   const dateStr = now.toLocaleDateString('th-TH', {day:'2-digit', month:'short', year:'2-digit'});
   const timeStr = now.toLocaleTimeString('th-TH', {hour:'2-digit', minute:'2-digit'});
   const orderId = 'EAT-' + Math.floor(Math.random() * 90000 + 10000);
 
-  // BG
-  ctx.fillStyle = WHITE;
+  // Backdrop (peach) so the torn paper edges stand out
+  ctx.fillStyle = PAGE;
   ctx.fillRect(0, 0, W, H);
 
-  // Header bar
+  // ── Torn paper shape (zigzag top & bottom) ──
+  const M = 16, amp = 9, toothW = 20;
+  const pTop = M + amp, pBot = H - M - amp;
+  const span = W - 2 * M, teeth = Math.round(span / toothW), tw = span / teeth;
+  function paperPath() {
+    ctx.beginPath();
+    ctx.moveTo(M, pTop);
+    for (let i = 0; i <= teeth; i++) ctx.lineTo(M + i * tw, i % 2 ? pTop - amp : pTop);
+    ctx.lineTo(W - M, pBot);
+    for (let i = 0; i <= teeth; i++) ctx.lineTo(W - M - i * tw, i % 2 ? pBot + amp : pBot);
+    ctx.lineTo(M, pTop);
+    ctx.closePath();
+  }
+  // paper fill + soft shadow
+  ctx.save();
+  paperPath();
+  ctx.shadowColor = 'rgba(244,81,30,0.22)';
+  ctx.shadowBlur = 26; ctx.shadowOffsetY = 10;
+  ctx.fillStyle = WHITE;
+  ctx.fill();
+  ctx.restore();
+
+  // clip everything else inside the paper
+  ctx.save();
+  paperPath();
+  ctx.clip();
+
+  // ── Header (orange) — fills the torn top edge ──
+  const headerH = 160;
   ctx.fillStyle = ORANGE;
-  ctx.fillRect(0, 0, W, 150);
+  ctx.fillRect(0, 0, W, headerH);
 
-  // Header text
-  ctx.fillStyle   = WHITE;
-  ctx.textAlign   = 'center';
-  ctx.font        = 'bold 20px sans-serif';
-  ctx.fillText('วันนี้กินอะไรดี? 🦊', W / 2, 52);
-  ctx.font        = '14px sans-serif';
-  ctx.fillStyle   = 'rgba(255,255,255,0.85)';
-  ctx.fillText('MEAL RECEIPT', W / 2, 80);
-  ctx.font        = '12px sans-serif';
-  ctx.fillText(`${dateStr}  ${timeStr}`, W / 2, 108);
-  ctx.fillText(orderId, W / 2, 130);
+  ctx.textAlign = 'center';
+  ctx.fillStyle = WHITE;
+  ctx.font = f(600, 25);
+  ctx.fillText('วันนี้กินอะไรดี? 🍜', W / 2, 66);
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '4px';
+  ctx.font = f(500, 13);
+  ctx.fillText('MEAL RECEIPT', W / 2, 94);
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
+  ctx.font = f(400, 13);
+  ctx.fillText(`${dateStr}  ${timeStr}`, W / 2, 120);
+  ctx.fillText(orderId, W / 2, 142);
 
-  // Dashed line helper
-  function dash(x1, y1, x2, y2) {
+  // ── Faint "🦊 APPROVED" stamp watermark ──
+  ctx.save();
+  ctx.globalAlpha = 0.07;
+  ctx.translate(W / 2, H * 0.52);
+  ctx.rotate(-0.30);
+  ctx.strokeStyle = ORANGE_DARK;
+  ctx.fillStyle   = ORANGE_DARK;
+  ctx.lineWidth = 5;  ctx.beginPath(); ctx.roundRect(-168, -72, 336, 144, 18); ctx.stroke();
+  ctx.lineWidth = 2;  ctx.beginPath(); ctx.roundRect(-156, -60, 312, 120, 12); ctx.stroke();
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.font = '30px sans-serif';        ctx.fillText('🦊', 0, -28);
+  ctx.font = f(600, 48);               ctx.fillText('APPROVED', 0, 22);
+  ctx.restore();
+
+  // dashed separator helper
+  function dash(y) {
     ctx.save();
-    ctx.setLineDash([8, 6]);
-    ctx.strokeStyle = '#CCC';
-    ctx.lineWidth   = 1.5;
-    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    ctx.setLineDash([7, 6]);
+    ctx.strokeStyle = '#E6DCD4';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(34, y); ctx.lineTo(W - 34, y); ctx.stroke();
     ctx.restore();
   }
 
-  dash(30, 162, W - 30, 162);
+  let y = headerH + 34;
+  dash(y); y += 32;
 
-  // Eyebrow
-  ctx.fillStyle = GRAY;
-  ctx.font      = '13px sans-serif';
+  // eyebrow
   ctx.textAlign = 'center';
-  ctx.fillText('เมนูที่ระบบสุ่มให้คุณ', W / 2, 192);
+  ctx.fillStyle = GRAY; ctx.font = f(400, 13);
+  ctx.fillText('เมนูที่ระบบสุ่มให้คุณ', W / 2, y); y += 48;
 
-  // Menu name — wrap if needed
-  ctx.font      = 'bold 48px sans-serif';
-  ctx.fillStyle = BLACK;
-  const maxW    = W - 60;
-  let menuLines = [];
+  // menu name (wrap if long)
+  ctx.font = f(600, 46); ctx.fillStyle = BLACK;
+  const maxW = W - 80;
+  let menuLines = [pick.name];
   if (ctx.measureText(pick.name).width > maxW) {
     const mid = Math.ceil(pick.name.length / 2);
     menuLines = [pick.name.slice(0, mid), pick.name.slice(mid)];
-  } else {
-    menuLines = [pick.name];
   }
-  menuLines.forEach((l, i) => ctx.fillText(l, W / 2, 256 + i * 56));
-  const nameBottom = 256 + (menuLines.length - 1) * 56;
+  menuLines.forEach((l, i) => ctx.fillText(l, W / 2, y + i * 54));
+  y += (menuLines.length - 1) * 54 + 38;
 
-  // Recommend
+  // recommend
   if (pick.recommend) {
-    ctx.font      = '15px sans-serif';
-    ctx.fillStyle = ORANGE;
-    ctx.fillText(`แนะนำ: ${pick.recommend}`, W / 2, nameBottom + 44);
+    ctx.font = f(400, 15); ctx.fillStyle = ORANGE;
+    ctx.fillText(`แนะนำ: ${pick.recommend}`, W / 2, y);
   }
+  y += 30;
 
-  const sep1 = nameBottom + 70;
-  dash(30, sep1, W - 30, sep1);
+  // ── Cheeky status row ──
+  const stats = [['ความอร่อย', '100%'], ['แคลอรี', 'โคตรเยอะ'], ['ความประหยัด', 'แล้วแต่ดวง']];
+  const pillX = 40, pillW = W - 80, pillH = 58;
+  ctx.fillStyle = LIGHT;
+  ctx.beginPath(); ctx.roundRect(pillX, y, pillW, pillH, 16); ctx.fill();
+  const colW = pillW / 3;
+  stats.forEach((s, i) => {
+    const cx = pillX + colW * i + colW / 2;
+    if (i > 0) {
+      ctx.strokeStyle = '#EBD9CD'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(pillX + colW * i, y + 13); ctx.lineTo(pillX + colW * i, y + pillH - 13); ctx.stroke();
+    }
+    ctx.textAlign = 'center';
+    ctx.fillStyle = GRAY;        ctx.font = f(400, 11); ctx.fillText(s[0], cx, y + 23);
+    ctx.fillStyle = ORANGE_DARK; ctx.font = f(600, 15); ctx.fillText(s[1], cx, y + 45);
+  });
+  y += pillH + 30;
 
-  // Meta rows
-  const tableTop = sep1 + 28;
+  dash(y); y += 32;
+
+  // meta rows
   const rows = [
     ['สัญชาติอาหาร', CUISINE_LABEL[pick.cuisine] || pick.cuisine],
     ['งบประมาณ',     BUDGET_LABEL[pick.budget]],
     ['เวลาสุ่ม',     timeStr],
   ];
-  ctx.font = '14px sans-serif';
+  ctx.font = f(400, 15);
   rows.forEach((row, i) => {
-    const y = tableTop + i * 38;
-    ctx.textAlign = 'left';  ctx.fillStyle = GRAY;  ctx.fillText(row[0], 50, y);
-    ctx.textAlign = 'right'; ctx.fillStyle = BLACK; ctx.fillText(row[1], W - 50, y);
+    const ry = y + i * 38;
+    ctx.textAlign = 'left';  ctx.fillStyle = GRAY;  ctx.fillText(row[0], 46, ry);
+    ctx.textAlign = 'right'; ctx.fillStyle = BLACK; ctx.fillText(row[1], W - 46, ry);
   });
+  y += rows.length * 38 + 8;
 
-  const sep2 = tableTop + rows.length * 38 + 18;
-  dash(30, sep2, W - 30, sep2);
+  dash(y); y += 26;
 
-  // Roast box
-  ctx.fillStyle = LIGHT;
-  ctx.beginPath();
-  ctx.roundRect(40, sep2 + 14, W - 80, 88, 12);
-  ctx.fill();
-
-  ctx.font      = 'italic 13px sans-serif';
-  ctx.fillStyle = '#555';
-  ctx.textAlign = 'center';
-  const roastWords = `"${pick.roast}"`.split('');
-  let line = '', lines = [];
-  roastWords.forEach(ch => {
-    if (ctx.measureText(line + ch).width > W - 130 && line) { lines.push(line); line = ch; }
+  // roast box (wrap)
+  ctx.font = f(400, 14);
+  const roastText = `"${pick.roast}"`;
+  let line = '', rlines = [];
+  for (const ch of roastText) {
+    if (ctx.measureText(line + ch).width > W - 150 && line) { rlines.push(line); line = ch; }
     else line += ch;
-  });
-  lines.push(line);
-  lines.forEach((l, i) => ctx.fillText(l, W / 2, sep2 + 50 + i * 24));
+  }
+  rlines.push(line);
+  const boxH = 28 + rlines.length * 24;
+  ctx.fillStyle = LIGHT;
+  ctx.beginPath(); ctx.roundRect(40, y, W - 80, boxH, 14); ctx.fill();
+  ctx.fillStyle = '#6B5D55'; ctx.font = `italic ${f(400, 14)}`; ctx.textAlign = 'center';
+  rlines.forEach((l, i) => ctx.fillText(l, W / 2, y + 32 + i * 24));
+  y += boxH + 30;
 
-  const sep3 = sep2 + 120;
-  dash(30, sep3, W - 30, sep3);
+  dash(y); y += 36;
 
-  // Footer
-  ctx.fillStyle = ORANGE;
-  ctx.font      = 'bold 16px sans-serif';
+  // footer
   ctx.textAlign = 'center';
-  ctx.fillText('ไม่รู้จะกินอะไร ให้เราสุ่มให้!', W / 2, sep3 + 38);
+  ctx.fillStyle = ORANGE; ctx.font = f(600, 16);
+  ctx.fillText('ไม่รู้จะกินอะไร ให้เราสุ่มให้!', W / 2, y); y += 24;
+  ctx.fillStyle = GRAY; ctx.font = f(400, 12);
+  ctx.fillText('whattoeat.app', W / 2, y); y += 30;
 
-  ctx.fillStyle = GRAY;
-  ctx.font      = '12px sans-serif';
-  ctx.fillText('whattoeat.app', W / 2, sep3 + 62);
-
-  // Barcode (decorative)
-  const bcY = sep3 + 82;
+  // barcode (decorative)
   ctx.fillStyle = BLACK;
   const bars = [3,1,2,1,3,2,1,2,1,3,2,1,2,3,1,2,1,3,2,1,2,1,3];
   let bx = W / 2 - 92;
-  bars.forEach((bw, i) => {
-    if (i % 2 === 0) ctx.fillRect(bx, bcY, bw * 4, 48);
-    bx += bw * 4;
-  });
-  ctx.font      = '11px monospace';
-  ctx.textAlign = 'center';
-  ctx.fillStyle = BLACK;
-  ctx.fillText(orderId, W / 2, bcY + 64);
+  bars.forEach((bw, i) => { if (i % 2 === 0) ctx.fillRect(bx, y, bw * 4, 46); bx += bw * 4; });
+  y += 46 + 22;
+  ctx.font = f(400, 12); ctx.fillStyle = BLACK; ctx.fillText(orderId, W / 2, y); y += 28;
+  ctx.fillStyle = ORANGE; ctx.font = '22px sans-serif';
+  ctx.fillText('★ ★ ★', W / 2, y);
 
-  ctx.fillStyle = ORANGE;
-  ctx.font      = '24px sans-serif';
-  ctx.fillText('* * *', W / 2, bcY + 92);
+  ctx.restore(); // end paper clip
 }
 
 // ── Event Listeners ──────────────────────────────────────────────────────────
@@ -827,8 +960,8 @@ document.getElementById('btnRespin').addEventListener('click', doSpin);
 
 document.getElementById('btnShare').addEventListener('click', () => {
   if (!currentPick) return;
-  drawReceipt(currentPick);
   document.getElementById('modalBg').classList.add('show');
+  document.fonts.ready.then(() => drawReceipt(currentPick));
 });
 
 document.getElementById('btnCloseModal').addEventListener('click', () => {
@@ -842,11 +975,13 @@ document.getElementById('modalBg').addEventListener('click', e => {
 
 document.getElementById('btnDownload').addEventListener('click', () => {
   if (!currentPick) return;
-  drawReceipt(currentPick);
-  const a  = document.createElement('a');
-  a.download = `กินอะไรดี-${currentPick.name}.png`;
-  a.href     = document.getElementById('receiptCanvas').toDataURL('image/png');
-  a.click();
+  document.fonts.ready.then(() => {
+    drawReceipt(currentPick);
+    const a  = document.createElement('a');
+    a.download = `กินอะไรดี-${currentPick.name}.png`;
+    a.href     = document.getElementById('receiptCanvas').toDataURL('image/png');
+    a.click();
+  });
 });
 
 // ── Init ──────────────────────────────────────────────────────────────────────
