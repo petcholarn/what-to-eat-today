@@ -211,6 +211,7 @@
 
     /* ── Result Card ── */
     .result-wrap {
+      position: relative;
       margin: 1rem 1rem 0;
       background: var(--white);
       border-radius: 24px;
@@ -291,18 +292,22 @@
     }
     .btn-respin {
       width: 100%;
-      margin-top: 8px;
-      padding: 12px;
+      margin-top: 10px;
+      padding: 16px;
       border-radius: 50px;
-      border: 1px solid var(--border-strong);
-      background: transparent;
-      font-size: 14px;
+      border: none;
+      background: linear-gradient(135deg, #4A4441 0%, #2B2724 100%);
+      font-size: 16px;
+      font-weight: 600;
       font-family: 'Kanit', sans-serif;
-      color: var(--text-sub);
+      color: #fff;
       cursor: pointer;
-      transition: all 0.12s;
+      transition: all 0.15s;
+      letter-spacing: 0.2px;
+      box-shadow: 0 10px 22px rgba(43,39,36,0.28);
     }
-    .btn-respin:active { transform: scale(0.98); }
+    .btn-respin:hover { transform: translateY(-1px); box-shadow: 0 12px 26px rgba(43,39,36,0.34); }
+    .btn-respin:active { transform: scale(0.98); box-shadow: 0 5px 14px rgba(43,39,36,0.26); }
 
     /* ── Footer ── */
     .footer {
@@ -428,14 +433,155 @@
       60%{transform:translateX(-5px)}
       80%{transform:translateX(4px)}
     }
+
+    /* ── Mascot (idle float) ── */
+    .mascot-svg {
+      width: 96px; height: 96px;
+      display: block; margin: 0 auto 0.75rem;
+      filter: drop-shadow(0 10px 14px rgba(244,81,30,0.22));
+      animation: floaty 3.6s ease-in-out infinite;
+    }
+    @keyframes floaty {
+      0%,100% { transform: translateY(0) rotate(-2deg); }
+      50%     { transform: translateY(-7px) rotate(2deg); }
+    }
+
+    /* ── Gacha Tier badge (result card) ── */
+    .tier-badge {
+      position: absolute;
+      top: 10px; right: 12px;
+      width: 76px; height: 76px;
+      display: flex; align-items: center; justify-content: center;
+      transform: rotate(7deg);
+      pointer-events: none;
+    }
+    .tier-badge .brush { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .tier-badge .brush path { stroke: none; opacity: 0.92; }   /* enso = filled brush (เรียวปลาย) */
+    .tier-badge .tier-text { position: relative; z-index: 1; font-size: 19px; font-weight: 700; letter-spacing: 0.6px; }
+    /* 4 tiers: N / R / SR / SSR — gradient + glow */
+    .tier-n  .brush path { fill: #A39E98; }
+    .tier-n  .tier-text { color: #8A857F; }
+    .tier-r  .brush path { fill: #2E86DE; }
+    .tier-r  .tier-text { background: linear-gradient(180deg,#6FC3F2,#2E86DE); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 4px rgba(46,134,222,0.45)); }
+    .tier-sr .brush path { fill: #9C5BF6; }
+    .tier-sr .tier-text { background: linear-gradient(180deg,#C4A2FF,#7B3FF2); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 5px rgba(124,63,242,0.5)); }
+    .tier-ssr .brush path { fill: #E0A93B; }
+    .tier-ssr .tier-text { background: linear-gradient(180deg,#FFE9A8,#E8B23C 55%,#B97E12); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 6px rgba(224,169,59,0.6)); }
+
+    /* ── Result swap pulse (reroll in-place) ── */
+    .result-wrap.swap { animation: swapPulse 0.34s ease; }
+    @keyframes swapPulse {
+      0%   { opacity: 1; transform: scale(1); }
+      40%  { opacity: 0.35; transform: scale(0.985); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* ── Halal / special disclaimer ── */
+    .special-note {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      margin-top: 9px;
+      line-height: 1.4;
+      opacity: 0.9;
+    }
+
+    /* ── Floating Mascot popup (rapid-reroll easter egg) ── */
+    .fox-pop {
+      position: fixed;
+      left: 50%; top: 40%;
+      z-index: 150;
+      pointer-events: none;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      transform: translate(-50%, -50%);
+    }
+    .fox-pop.show { display: flex; animation: foxPop 1.3s ease forwards; }
+    .fox-pop svg { width: 116px; height: 116px; filter: drop-shadow(0 10px 18px rgba(244,81,30,0.3)); }
+    .fox-say {
+      background: var(--text);
+      color: #fff;
+      font-size: 13px; font-weight: 500;
+      padding: 9px 16px;
+      border-radius: 16px;
+      max-width: 240px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.22);
+    }
+    @keyframes foxPop {
+      0%   { opacity: 0; transform: translate(-50%,-50%) scale(0.3) rotate(-8deg); }
+      18%  { opacity: 1; transform: translate(-50%,-50%) scale(1.12) rotate(4deg); }
+      32%  { transform: translate(-50%,-50%) scale(1) rotate(0); }
+      78%  { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%,-50%) scale(0.92); }
+    }
+
+    /* ── Loading mascot (fox, animated) ── */
+    .loading-fox { width: 104px; height: 104px; filter: drop-shadow(0 10px 16px rgba(244,81,30,0.22)); animation: bob 0.85s ease-in-out infinite; }
+    .loading-fox svg { width: 100%; height: 100%; display: block; }
+
+    /* ── Sticker-style special-option icons ── */
+    .special-chip { display: inline-flex; align-items: center; gap: 7px; padding-left: 10px; }
+    .sticker { width: 23px; height: 23px; flex: 0 0 auto; filter: drop-shadow(0 1.5px 1.5px rgba(0,0,0,0.18)); }
+    .special-chip.active .sticker { filter: drop-shadow(0 1.5px 2px rgba(244,81,30,0.3)); }
   </style>
 </head>
 <body>
+
+<!-- Reusable SVG: fox mascot symbol (gradient) + China flag star — defined once, referenced via <use> -->
+<svg width="0" height="0" style="position:absolute;left:-9999px" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="foxFace" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F2661B"/>
+      <stop offset="0.46" stop-color="#FF8A3D"/>
+      <stop offset="0.78" stop-color="#FFD3AC"/>
+      <stop offset="1" stop-color="#FFF1E2"/>
+    </linearGradient>
+    <linearGradient id="foxEar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E6530F"/><stop offset="1" stop-color="#F87E30"/>
+    </linearGradient>
+    <polygon id="cnStar" points="0,-1 0.2245,-0.309 0.951,-0.309 0.363,0.118 0.588,0.809 0,0.382 -0.588,0.809 -0.363,0.118 -0.951,-0.309 -0.2245,-0.309" fill="#FFDE00"/>
+  </defs>
+  <symbol id="foxMascot" viewBox="0 0 100 100">
+    <!-- ears + head: thick dark sticker outline -->
+    <g stroke="#3A2118" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M23 12 L44 34 L17 45 Z" fill="url(#foxEar)"/>
+      <path d="M77 12 L56 34 L83 45 Z" fill="url(#foxEar)"/>
+      <path d="M50 31 C70 31 85 45 85 63 C85 82 69 93 50 93 C31 93 15 82 15 63 C15 45 30 31 50 31 Z" fill="url(#foxFace)"/>
+    </g>
+    <!-- ear inners (cream) -->
+    <path d="M27 19 L40 33 L24 40 Z" fill="#FFE7CC" stroke="#3A2118" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M73 19 L60 33 L76 40 Z" fill="#FFE7CC" stroke="#3A2118" stroke-width="2" stroke-linejoin="round"/>
+    <!-- cream muzzle / chin -->
+    <path d="M50 60 C63 60 73 67 73 75 C73 86 62 93 50 93 C38 93 27 86 27 75 C27 67 37 60 50 60 Z" fill="#FFF3E6"/>
+    <!-- forehead highlight -->
+    <ellipse cx="42" cy="46" rx="13" ry="7.5" fill="#FFFFFF" opacity="0.22"/>
+    <!-- pink cheeks -->
+    <ellipse cx="31" cy="70" rx="5.2" ry="3.4" fill="#FF9DAE" opacity="0.6"/>
+    <ellipse cx="69" cy="70" rx="5.2" ry="3.4" fill="#FF9DAE" opacity="0.6"/>
+    <!-- closed happy eyes -->
+    <g fill="none" stroke="#3A2118" stroke-width="3.4" stroke-linecap="round">
+      <path d="M33 57 Q38.5 63 44 57"/>
+      <path d="M56 57 Q61.5 63 67 57"/>
+    </g>
+    <!-- nose -->
+    <path d="M50 66 Q45.5 66 46.5 70 Q48 73 50 73 Q52 73 53.5 70 Q54.5 66 50 66 Z" fill="#3A2118"/>
+    <!-- mouth -->
+    <g fill="none" stroke="#3A2118" stroke-width="2.2" stroke-linecap="round">
+      <path d="M50 73 Q47 77 43.5 75.5"/>
+      <path d="M50 73 Q53 77 56.5 75.5"/>
+    </g>
+  </symbol>
+</svg>
+
 <div class="app" id="app" role="main">
 
   <!-- Hero -->
   <div class="hero">
-    <div class="mascot" aria-hidden="true">🦊</div>
+    <div class="mascot-svg" aria-hidden="true">
+      <svg viewBox="0 0 100 100"><use href="#foxMascot"/></svg>
+    </div>
     <h1 class="hero-title">วันนี้กินอะไรดี?</h1>
     <p class="hero-sub">เลิกคิดให้ปวดหัว ปล่อยให้เป็นหน้าที่เรา</p>
     <div class="streak-badge" id="streakBadge">🔥 1 วัน</div>
@@ -449,7 +595,8 @@
       <div class="chip-row">
         <div class="chip active" data-group="cuisine" data-val="thai"><svg class="flag" viewBox="0 0 21 14" aria-hidden="true"><rect width="21" height="14" fill="#ED1C24"/><rect y="2.33" width="21" height="9.33" fill="#fff"/><rect y="4.67" width="21" height="4.67" fill="#241D4F"/></svg>ไทย</div>
         <div class="chip" data-group="cuisine" data-val="jp"><svg class="flag" viewBox="0 0 21 14" aria-hidden="true"><rect width="21" height="14" fill="#fff"/><circle cx="10.5" cy="7" r="3.9" fill="#BC002D"/></svg>ญี่ปุ่น</div>
-        <div class="chip" data-group="cuisine" data-val="kr"><svg class="flag" viewBox="0 0 21 14" aria-hidden="true"><rect width="21" height="14" fill="#fff"/><path d="M10.5 3.1 a3.9 3.9 0 0 1 0 7.8 a1.95 1.95 0 0 1 0 -3.9 a1.95 1.95 0 0 0 0 -3.9 z" fill="#CD2E3A"/><path d="M10.5 3.1 a3.9 3.9 0 0 0 0 7.8 a1.95 1.95 0 0 0 0 -3.9 a1.95 1.95 0 0 1 0 -3.9 z" fill="#0047A0"/></svg>เกาหลี</div>
+        <div class="chip" data-group="cuisine" data-val="kr"><svg class="flag" viewBox="0 0 21 14" aria-hidden="true"><rect width="21" height="14" fill="#fff"/><g transform="rotate(-33.69 10.5 7)"><path d="M6.9 7 A3.6 3.6 0 0 1 14.1 7 A1.8 1.8 0 0 1 10.5 7 A1.8 1.8 0 0 0 6.9 7 Z" fill="#C60C30"/><path d="M6.9 7 A3.6 3.6 0 0 0 14.1 7 A1.8 1.8 0 0 0 10.5 7 A1.8 1.8 0 0 1 6.9 7 Z" fill="#003478"/></g><g fill="#0F0F0F"><g transform="translate(4.2 3) rotate(-33.69)"><rect x="-2.3" y="-1.55" width="4.6" height="0.66"/><rect x="-2.3" y="-0.33" width="4.6" height="0.66"/><rect x="-2.3" y="0.89" width="4.6" height="0.66"/></g><g transform="translate(16.8 11) rotate(-33.69)"><rect x="-2.3" y="-1.55" width="1.85" height="0.66"/><rect x="0.45" y="-1.55" width="1.85" height="0.66"/><rect x="-2.3" y="-0.33" width="1.85" height="0.66"/><rect x="0.45" y="-0.33" width="1.85" height="0.66"/><rect x="-2.3" y="0.89" width="1.85" height="0.66"/><rect x="0.45" y="0.89" width="1.85" height="0.66"/></g><g transform="translate(16.8 3) rotate(33.69)"><rect x="-2.3" y="-1.55" width="1.85" height="0.66"/><rect x="0.45" y="-1.55" width="1.85" height="0.66"/><rect x="-2.3" y="-0.33" width="4.6" height="0.66"/><rect x="-2.3" y="0.89" width="1.85" height="0.66"/><rect x="0.45" y="0.89" width="1.85" height="0.66"/></g><g transform="translate(4.2 11) rotate(33.69)"><rect x="-2.3" y="-1.55" width="4.6" height="0.66"/><rect x="-2.3" y="-0.33" width="1.85" height="0.66"/><rect x="0.45" y="-0.33" width="1.85" height="0.66"/><rect x="-2.3" y="0.89" width="4.6" height="0.66"/></g></g></svg>เกาหลี</div>
+        <div class="chip" data-group="cuisine" data-val="cn"><svg class="flag" viewBox="0 0 21 14" aria-hidden="true"><rect width="21" height="14" fill="#DE2910"/><use href="#cnStar" transform="translate(3.8 3.5) scale(2.1)"/><use href="#cnStar" transform="translate(7.2 1.3) scale(0.7)"/><use href="#cnStar" transform="translate(8.6 2.9) scale(0.7)"/><use href="#cnStar" transform="translate(8.6 4.9) scale(0.7)"/><use href="#cnStar" transform="translate(7.2 6.5) scale(0.7)"/></svg>จีน</div>
         <div class="chip" data-group="cuisine" data-val="west">🍕 ตะวันตก</div>
         <div class="chip" data-group="cuisine" data-val="all">🌍 รวมมิตร</div>
       </div>
@@ -466,7 +613,7 @@
     </div>
 
     <div class="card-section">
-      <div class="section-label">ฟีลลิ่ง <span>(เลือกได้หลายอย่าง)</span></div>
+      <div class="section-label">ฟีลลิ่ง <span>(เลือก 1 อย่าง)</span></div>
       <div class="chip-row">
         <div class="chip mood-chip" data-val="spicy">🌶️ แซ่บๆ</div>
         <div class="chip mood-chip" data-val="soup">🍜 สายซด</div>
@@ -481,11 +628,12 @@
     <div class="card-section">
       <div class="section-label">ตัวเลือกพิเศษ</div>
       <div class="special-row">
-        <div class="special-chip" data-val="halal">☪️ ฮาลาล</div>
-        <div class="special-chip" data-val="vegan">🥬 วีแกน</div>
-        <div class="special-chip" data-val="protein">💪 High Protein</div>
-        <div class="special-chip" data-val="nomeat">🙏 ไม่กินเนื้อวัว</div>
+        <div class="special-chip" data-val="halal"><svg class="sticker" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#1FA463"/><circle cx="12" cy="12" r="11" fill="none" stroke="#fff" stroke-width="1.4" opacity="0.85"/><path d="M15.3 7.2 a5.2 5.2 0 1 0 0 9.6 a4 4 0 1 1 0 -9.6 z" fill="#fff"/><path d="M17.6 10.9 l0.55 1.4 1.5 0.08 -1.16 0.95 0.4 1.45 -1.29 -0.78 -1.29 0.78 0.4 -1.45 -1.16 -0.95 1.5 -0.08 z" fill="#fff"/></svg>ฮาลาล</div>
+        <div class="special-chip" data-val="vegan"><svg class="sticker" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#56B947"/><circle cx="12" cy="12" r="11" fill="none" stroke="#fff" stroke-width="1.4" opacity="0.85"/><path d="M12 18.5 V11" stroke="#2E7D32" stroke-width="1.8" stroke-linecap="round"/><path d="M12 12.2 C12 8.2 9 6.6 6.4 6.9 C6.3 10.2 9 12.2 12 12.2 Z" fill="#fff"/><path d="M12 11 C12 7.4 15 5.9 17.6 6.3 C17.7 9.5 15 11 12 11 Z" fill="#EAF7E5"/></svg>วีแกน</div>
+        <div class="special-chip" data-val="protein"><svg class="sticker" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#FF7A45"/><circle cx="12" cy="12" r="11" fill="none" stroke="#fff" stroke-width="1.4" opacity="0.85"/><g fill="#fff"><rect x="4.8" y="9.4" width="2.3" height="5.2" rx="0.9"/><rect x="6.9" y="10.6" width="1.7" height="2.8" rx="0.6"/><rect x="8.3" y="11.1" width="7.4" height="1.8" rx="0.7"/><rect x="15.4" y="10.6" width="1.7" height="2.8" rx="0.6"/><rect x="16.9" y="9.4" width="2.3" height="5.2" rx="0.9"/></g></svg>High Protein</div>
+        <div class="special-chip" data-val="nomeat"><svg class="sticker" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#E0533A"/><circle cx="12" cy="12" r="11" fill="none" stroke="#fff" stroke-width="1.4" opacity="0.85"/><g fill="#fff"><path d="M6.6 8.6 q-2 -0.9 -2.4 1 q1.1 0.5 2.4 0.2 z"/><path d="M17.4 8.6 q2 -0.9 2.4 1 q-1.1 0.5 -2.4 0.2 z"/><ellipse cx="12" cy="12.4" rx="4.6" ry="4.2"/></g><ellipse cx="12" cy="13.9" rx="3" ry="2.1" fill="#E0533A"/><circle cx="10.5" cy="13.7" r="0.55" fill="#fff"/><circle cx="13.5" cy="13.7" r="0.55" fill="#fff"/><circle cx="10.2" cy="10.9" r="0.7" fill="#E0533A"/><circle cx="13.8" cy="10.9" r="0.7" fill="#E0533A"/><line x1="5.4" y1="5.4" x2="18.6" y2="18.6" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><line x1="5.4" y1="5.4" x2="18.6" y2="18.6" stroke="#E0533A" stroke-width="0.9" stroke-linecap="round"/></svg>ไม่กินเนื้อวัว</div>
       </div>
+      <div class="special-note">☪️ ฮาลาล: ตามข้อมูลที่เรามี ไม่ใช่การรับรองทางการ — โปรดตรวจสอบที่ร้านอีกครั้ง</div>
     </div>
 
   </div>
@@ -499,6 +647,10 @@
 
   <!-- Result -->
   <div class="result-wrap" id="resultCard" aria-live="polite">
+    <div class="tier-badge tier-n" id="tierBadge" aria-hidden="true">
+      <svg class="brush" viewBox="0 0 70 70" aria-hidden="true"><path id="ensoCardPath" d=""/></svg>
+      <span class="tier-text" id="tierText">—</span>
+    </div>
     <div class="result-eyebrow">เมนูวันนี้ของคุณ</div>
     <div class="result-name" id="resultMenu">—</div>
     <div class="result-recommend" id="resultRecommend"></div>
@@ -512,17 +664,17 @@
       <div class="btn-action orange" id="btnShare">📸 Save / Share</div>
       <div class="btn-action" id="btnMap">📍 หาร้านใกล้ฉัน</div>
     </div>
-    <button class="btn-respin" id="btnRespin">🔄 ไม่เอาอะ... ขอสุ่มใหม่</button>
+    <button class="btn-respin" id="btnRespin">🔄 ไม่เอาอะ... ขอสุ่มใหม่ (ฟิลเตอร์เดิม)</button>
   </div>
 
-  <div class="footer">วันนี้กินอะไรดี? · เมนู 60 รายการ · ออฟไลน์ได้ 100%</div>
+  <div class="footer">วันนี้กินอะไรดี? · คลังแสงอาหารกวนๆ พร้อมรบ</div>
 </div>
 
 <!-- Share Modal -->
 <div class="modal-bg" id="modalBg">
   <div class="modal">
     <div class="modal-title">📸 ใบเสร็จเมนูวันนี้</div>
-    <canvas id="receiptCanvas" width="600" height="1040"></canvas>
+    <canvas id="receiptCanvas" width="600" height="1100"></canvas>
     <div class="modal-actions">
       <div class="btn-modal" id="btnCloseModal">ปิด</div>
       <div class="btn-modal primary" id="btnDownload">⬇️ บันทึกรูป</div>
@@ -530,9 +682,15 @@
   </div>
 </div>
 
+<!-- Floating Mascot popup (rapid-reroll easter egg) -->
+<div class="fox-pop" id="foxPop" aria-hidden="true">
+  <svg viewBox="0 0 100 100"><use href="#foxMascot"/></svg>
+  <div class="fox-say" id="foxSay">อีกแล้วเหรอ</div>
+</div>
+
 <!-- Loading Overlay -->
 <div class="loading-overlay" id="loadingOverlay" aria-live="polite" aria-label="กำลังสุ่มเมนู">
-  <div class="loading-emoji" aria-hidden="true">🍱</div>
+  <div class="loading-fox" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#foxMascot"/></svg></div>
   <div class="loading-text">กำลังสุ่มเมนูเด็ดให้คุณ...</div>
   <div class="loading-dots" aria-hidden="true"><span></span><span></span><span></span></div>
 </div>
@@ -543,97 +701,229 @@
 // ── Data ─────────────────────────────────────────────────────────────────────
 // mood: spicy=เผ็ด, soup=มีน้ำซด, full=อิ่มจุก, fried=ของทอด
 // isNoMeat: true = ไม่มีเนื้อวัว (หมู/ไก่/ทะเล/ผักได้)
+// schema: name, meat (เนื้อสัตว์), side (เครื่องเคียง), cuisine, budget, mood[], flags, tier, roast
+// tier: common(เทา) / sr(ม่วง) / ssr(ทอง) — อิงความหายาก/ยูนีควัตถุดิบ/ช่วงราคาเบื้องหลัง (subjective)
 const menus = [
-  // THAI งบปกติ
-  {name:"ข้าวกะเพราหมูกรอบ",recommend:"หมูกรอบเพิ่ม / ไข่ดาวกรอบ",cuisine:"thai",budget:"low",mood:["spicy","fried","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"เมนูสิ้นคิดระดับชาติ แต่เยียวยาทุกสิ่ง!"},
-  {name:"ข้าวกะเพราไก่",recommend:"ไก่สับ / ไก่ชิ้น / ไข่ดาว",cuisine:"thai",budget:"low",mood:["spicy","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"กะเพราไก่คือชีวิต ธรรมดาแต่ไม่เคยผิดหวัง"},
-  {name:"ข้าวผัดหมู/กุ้ง",recommend:"หมู / กุ้ง / ทะเล / ปู",cuisine:"thai",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"เมนูเซฟโซน กินๆ ไปเถอะจะได้มีแรงปั่นงานต่อ"},
-  {name:"ข้าวมันไก่ทอด",recommend:"ไก่ทอด / ไก่ต้มผสม",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"ไก่ทอดกรอบๆ กับข้าวมันอ่อนๆ ชีวิตพอแล้ว"},
-  {name:"ก๋วยเตี๋ยว",recommend:"เส้นใหญ่น้ำตก / ต้มยำ / เย็นตาโฟ",cuisine:"thai",budget:"low",mood:["soup","spicy"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"สั่งพิเศษไปเลย ชามเดียวมันจะไปอิ่มอะไร!"},
-  {name:"ก๋วยจั๊บ",recommend:"หมู / ไก่ / รวม",cuisine:"thai",budget:"low",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"เครื่องเทศหอมโชย น้ำซุปใสๆ แต่อร่อยสะใจ"},
-  {name:"ส้มตำไก่ย่าง",recommend:"ข้าวเหนียว / ไก่เพิ่ม",cuisine:"thai",budget:"low",mood:["spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"แซ่บจนลืมทุกข์ ลืมชีวิต ลืมเป้าหมาย"},
-  {name:"ข้าวไข่เจียวทรงเครื่อง",recommend:"หมูสับ / กุ้งสับ / แหนม",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"วันสบายๆ หรือเงินหมด เอาดีๆ?"},
-  {name:"โจ๊กหมูสับ",recommend:"ใส่ไข่เยี่ยวม้า / ขิงซอย",cuisine:"thai",budget:"low",mood:["soup"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"ฟีลคนป่วย หรือแค่ไม่อยากเคี้ยว เอาดีๆ?"},
-  {name:"ข้าวต้ม",recommend:"ปลา / ทะเล / หมู / กุ้ง",cuisine:"thai",budget:"low",mood:["soup","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"กินคลีนๆ ล้างบาปบ้าง เดี๋ยวหมอจะด่าเอา"},
-  {name:"ผัดไทยกุ้งสด",recommend:"กุ้งสด / ไก่ / เต้าหู้",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"เส้นจันท์เหนียวนุ่ม กับน้ำมันฉ่ำๆ อ้วนช่างมัน!"},
-  {name:"ราดหน้า",recommend:"หมูหมัก / ทะเล / เต้าหู้",cuisine:"thai",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"น้ำหนืดๆ หวานๆ ยอมกินผักบ้างนะวัยรุ่น"},
-  {name:"ข้าวหมกไก่",recommend:"ไก่ต้ม / น้ำจิ้ม",cuisine:"thai",budget:"low",mood:["spicy","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"หอมเครื่องเทศทะลุจอ ระวังข้าวติดคอนะวัยรุ่น"},
-  {name:"ไก่ทอดหาดใหญ่",recommend:"ไก่ทอด / ข้าวเหนียว",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"กรอบนอกนุ่มในตำนาน ไม่มีเหตุผลต้องอธิบาย"},
-  {name:"ผัดผักเต้าหู้",recommend:"เต้าหู้ทอด / เต้าหู้แข็ง",cuisine:"thai",budget:"low",mood:["full"],isHalal:true,isVegan:true,isHighProtein:false,isNoMeat:true,roast:"กินดีมีสุข กินเจยิ่งมีบุญ"},
-  // THAI งบเยอะ
-  {name:"หมูกระทะ",recommend:"สามชั้น / คอหมู / หมูสันนอก",cuisine:"thai",budget:"mid",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"กลิ่นติดยันชาติหน้า แต่วันนี้กูต้องได้กิน!"},
-  {name:"ชาบู / หม่าล่า",recommend:"เนื้อ / หมู / ทะเล / ผัก",cuisine:"thai",budget:"mid",mood:["soup","spicy","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,roast:"หยิบเพลินๆ ระวังตอนจ่ายตังค์หน้าซีดนะจ๊ะ"},
-  {name:"อาหารทะเลเผา",recommend:"กุ้งแม่น้ำ / ปูนิ่ม / หอยแมลงภู่",cuisine:"thai",budget:"mid",mood:["spicy","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"กุ้งแม่น้ำตัวโตๆ น้ำจิ้มซีฟู้ดแซ่บๆ โคตรฟิน"},
-  {name:"ข้าวซอย",recommend:"เนื้อเปื่อย / ไก่ / ทะเล",cuisine:"thai",budget:"mid",mood:["soup","spicy","full"],isHalal:true,isVegan:false,isHighProtein:false,isNoMeat:false,roast:"ซู้ดเส้นกรอบๆ ให้ดังไปถึงเชียงใหม่!"},
-  {name:"ข้าวปลากะพง",recommend:"ราดน้ำปลา / ผัดพริกเกลือ",cuisine:"thai",budget:"mid",mood:["spicy","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"ปลาเน้นๆ เค็มๆ หวานๆ กินข้าวมดหม้อแน่นอน"},
-  {name:"ลาบหมู",recommend:"หมูสับ / ข้าวเหนียว",cuisine:"thai",budget:"mid",mood:["spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"สายอีสานต้องได้ลาบ จะกินเที่ยงหรือดึกก็แซ่บ"},
-  {name:"ต้มแซ่บซี่โครงหมู",recommend:"ซี่โครงหมู / ใส่ผัก",cuisine:"thai",budget:"mid",mood:["soup","spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"น้ำซุปแดงเดือดพล่าน เผ็ดแล้วยังจะสั่งเพิ่มอีก"},
-  {name:"ต้มยำกุ้ง",recommend:"กุ้งสด / ซีฟู้ด / น้ำข้น",cuisine:"thai",budget:"mid",mood:["soup","spicy"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"เปรี้ยวเผ็ดหอมตะไคร้ใบมะกรูด ฝรั่งกินแล้วร้อง wow"},
-  // THAI งบเยอะมาก
-  {name:"บุฟเฟต์ซีฟู้ดพรีเมียม",recommend:"ล็อบสเตอร์ / ปูอลาสก้า / หอยเชลล์",cuisine:"thai",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"กินให้คุ้มนะ ไม่งั้นเสียดายตังค์ยันปีหน้า!"},
-  {name:"ปูไข่ดองพรีเมียม",recommend:"ปูดองซีอิ๊ว / กุ้งดองเกาหลี",cuisine:"thai",budget:"high",mood:["spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"ดูดปูให้เสียงดัง! ระวังจู๊ดๆ พรุ่งนี้นะวัยรุ่น"},
-  {name:"Fine Seafood",recommend:"กุ้งล็อบสเตอร์เผา / ปูม้านึ่ง",cuisine:"thai",budget:"high",mood:["full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"ทะเลสดๆ ราคาแพงๆ แต่ถ่ายรูปลง IG คุ้มมาก"},
-  // JAPANESE งบปกติ
-  {name:"ยากิโซบะ",recommend:"หมู / ซีฟู้ด / ผัก",cuisine:"jp",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"เส้นผัดซอสเข้มๆ กินทั้งกระทะยังไม่พอ"},
-  {name:"โอนิกิริ",recommend:"ทูน่า / แซลมอน / อูเมะ",cuisine:"jp",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"กินง่ายพกสะดวก แต่ทำเองนี่สิ มือเป็นข้าวทั้งวัน"},
-  {name:"กิวดอน",recommend:"เนื้อบาง / ไข่ออนเซ็น / ชีส",cuisine:"jp",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,roast:"Yoshinoya level แต่รสชาติไม่ธรรมดา กินหมดชามแป๊บเดียว"},
-  // JAPANESE งบเยอะ
-  {name:"ราเมน",recommend:"ทงคตสึ / โชยุ / มิโซะ / ซิโอะ",cuisine:"jp",budget:"mid",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"ซู้ดเส้นให้ดังๆ จะได้รู้ว่าวิญญาณคนญี่ปุ่นเข้าสิง"},
-  {name:"ทงคตสึ",recommend:"ซี่โครง / สันนอก / ฮิเระ",cuisine:"jp",budget:"mid",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"หมูทอดกรอบๆ กินกับซอสทงคตสึ ชีวิตพอแล้ว"},
-  {name:"เทมปุระ",recommend:"กุ้ง / ผัก / ปลา / มิกซ์",cuisine:"jp",budget:"mid",mood:["fried"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"ชุบแป้งทอดทุกอย่างแล้วมันก็อร่อยทุกอย่าง จริงไหม?"},
-  {name:"ซูชิสายพาน",recommend:"ซาลมอน / ทูน่า / อีล",cuisine:"jp",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"จานละนิดจานละหน่อย รวมกันทีจ่ายเป็นพัน"},
-  {name:"อุด้ง / โซบะ",recommend:"เย็น / ร้อน / น้ำ / แห้ง",cuisine:"jp",budget:"mid",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"เส้นหนาเหนียวนุ่ม เคี้ยวให้ช้าๆ อย่ารีบชีวิต"},
-  {name:"ดอนบุริ",recommend:"คัตสึดอน / โอยาโกดอน",cuisine:"jp",budget:"mid",mood:["full","fried"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"ข้าวหน้าอะไรก็อิ่มหมัด กินเสร็จแล้วง่วงนอน"},
-  // JAPANESE งบเยอะมาก
-  {name:"โอมากาเสะ",recommend:"ฝากเชฟจัดให้เต็มที่",cuisine:"jp",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"รวยนักก็จัดไป! ให้เชฟปั้นข้าวให้กินหล่อๆ"},
-  {name:"ชาบูพรีเมียม",recommend:"Haidilao / Mo-Mo / Suki Masa",cuisine:"jp",budget:"high",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,roast:"บริการทุกระดับประทับใจ เงินในกระเป๋าหายวับ!"},
-  {name:"เนื้อวากิวย่าง",recommend:"A5 / ดรายเอจ / ริบอาย",cuisine:"jp",budget:"high",mood:["full","fried"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,roast:"ละลายในปาก และเงินก็ละลายในกระเป๋าด้วย"},
-  // KOREAN งบปกติ
-  {name:"ต็อกบกกี",recommend:"ซอสแดง / ชีส / โรเซ่",cuisine:"kr",budget:"low",mood:["spicy","full"],isHalal:false,isVegan:true,isHighProtein:false,isNoMeat:true,roast:"เผ็ดหวานเหนียวนุ่ม กินคนเดียวหมดหม้อไม่รู้ตัว"},
-  {name:"จาจังมยอน",recommend:"ซอสดำ / ใส่ไข่ดาว",cuisine:"kr",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"เส้นดำๆ น่ากลัว แต่กินแล้วติดใจไม่รู้ลืม"},
-  {name:"บะหมี่เกาหลี",recommend:"ซินราเมน / บูลดัก / จินราเมน",cuisine:"kr",budget:"low",mood:["soup","spicy"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"1 ห่อ 30 บาท แต่อร่อยสู้ร้านหลายร้านได้เลย"},
-  // KOREAN งบเยอะ
-  {name:"ไก่ทอดเกาหลี",recommend:"ซอสฮันยัง / ครีมชีส / ออริจินัล",cuisine:"kr",budget:"mid",mood:["fried","spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"กรอบยันเงา กินคู่กับไชเท้าดองคือฟิน!"},
-  {name:"ปิ้งย่างเกาหลี",recommend:"สามชั้น / คอหมู / ซัมเกียบซัล",cuisine:"kr",budget:"mid",mood:["full","fried"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"สามชั้นเกรียมๆ ห่อผักสไตล์โอปป้า ฟินสุด!"},
-  {name:"บิบิมบับ",recommend:"ไข่ดาว / เนื้อสับ / เต้าหู้",cuisine:"kr",budget:"mid",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:false,roast:"คนเกาหลีกินทุกวันแล้วยังหุ่นดี ชีวิตไม่ยุติธรรม"},
-  {name:"ทตโพกีสตรีท",recommend:"ทตโพกี / ซุนแด / โอเด้ง",cuisine:"kr",budget:"mid",mood:["spicy","soup"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"แดก้อนมาแล้วพวกนี้ กินทั้งคืนยังไม่อิ่มใจ"},
-  {name:"ซุนดูบูจิเก",recommend:"เต้าหู้นิ่ม / หอย / หมู",cuisine:"kr",budget:"mid",mood:["soup","spicy","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"ซุปเต้าหู้เดือดพล่าน เผ็ดพอแล้วหยุดก็ยังซดต่อ"},
-  {name:"คิมบับ",recommend:"ทูน่า / ไข่ / หมู / ผัก",cuisine:"kr",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"โรลง่ายๆ กินไวๆ แต่ทำเองนี่สิยากกว่าที่คิด"},
-  // KOREAN งบเยอะมาก
-  {name:"ปูไข่ดองเกาหลี",recommend:"ปูดองซีอิ๊ว / ซอสเผ็ด",cuisine:"kr",budget:"high",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"ข้าวโจรที่แพงที่สุดในจักรวาล แต่ก็ยังสั่งเพิ่ม"},
-  {name:"บุฟเฟต์เกาหลีพรีเมียม",recommend:"หมูคุโรบูตะ / เนื้อวากิว / ทะเล",cuisine:"kr",budget:"high",mood:["full","fried"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,roast:"จ่ายครั้งเดียวกินได้ทั้งคืน คุ้มถ้าท้องไม่รู้จักแพ้"},
-  // WESTERN งบปกติ
-  {name:"เบอร์เกอร์ฟาสต์ฟู้ด",recommend:"McDonald's / Burger King / MOS",cuisine:"west",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,roast:"ไม่ต้องคิดมาก เดินเข้าร้านสั่งเลย ชีวิตง่ายงี้แหละ"},
-  {name:"เคบับ / ชาวาม่า",recommend:"ไก่ / เนื้อ / ผักรวม",cuisine:"west",budget:"low",mood:["full","spicy"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:false,roast:"อาหารริมทางที่ทำให้รู้สึกว่าอยู่ตะวันออกกลาง"},
-  {name:"แซนด์วิช / ซับมารีน",recommend:"BLT / คลับ / ทูน่า / Subway",cuisine:"west",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"อาหารที่แค่หนีบไปกัดก็ดูมีชีวิตขึ้นมาทันที"},
-  // WESTERN งบเยอะ
-  {name:"พิซซ่า",recommend:"ฮาวายเอียน / เปปเปอโรนี / ซีฟู้ด",cuisine:"west",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"สั่งถาดใหญ่ไปเลย กินไม่หมดพรุ่งนี้ค่อยเวฟ"},
-  {name:"เบอร์เกอร์",recommend:"ชีสเบอร์เกอร์ / เบคอน / มัชรูม",cuisine:"west",budget:"mid",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,roast:"รีบกิน รีบอ้วน ชีวิตมันสั้น!"},
-  {name:"สเต็กหมู/ไก่",recommend:"สเต็กหมู / ไก่กริลล์ / ซอสมัสตาร์ด",cuisine:"west",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"สเต็กไม่ต้องเป็นเนื้อก็อร่อยได้ เชื่อเรา"},
-  {name:"พาสต้า",recommend:"คาร์โบนาร่า / อาราเบียต้า / วองโกเล",cuisine:"west",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,roast:"ม้วนเส้นให้เป็นแล้วค่อยกิน จะได้ดูมีคลาส"},
-  {name:"ไก่ทอดฟาสต์ฟู้ด",recommend:"KFC / Popeyes / MOS Chicken",cuisine:"west",budget:"mid",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,roast:"Fast food เร็วทั้งกิน เร็วทั้งอ้วน ชีวิต efficient มาก"},
-  // WESTERN งบเยอะมาก
-  {name:"สเต็กเนื้อวัวดรายเอจ",recommend:"Tomahawk / Ribeye / T-Bone",cuisine:"west",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,roast:"สายเนื้อต้องโดน จ่ายแพงทั้งทีต้องเอาให้สุด"},
-  {name:"Fine Dining",recommend:"ฝากเชฟจัดให้เต็มที่",cuisine:"west",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:false,roast:"กินเอาคอนเทนต์ จานใหญ่แต่อาหารกระจึ๋งนึง"},
+  // ── THAI · งบปกติ ──
+  {name:"ข้าวกะเพราหมูกรอบ",meat:"หมูกรอบ / หมูสับ / ไก่",side:"ไข่ดาว",cuisine:"thai",budget:"low",mood:["spicy","fried","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"สั่งกะเพราเพราะคิดเมนูไม่ออก เป็นความสม่ำเสมอที่น่านับถือ"},
+  {name:"ข้าวกะเพราไก่ไข่ดาว",meat:"ไก่สับ / ไก่ชิ้น",side:"ไข่ดาว",cuisine:"thai",budget:"low",mood:["spicy","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"ปลอดภัยไว้ก่อน เหมือนทุกการตัดสินใจของคุณที่ผ่านมา"},
+  {name:"ข้าวผัดหมู/กุ้ง",meat:"หมู / กุ้ง / ปู / ทะเล",side:"แตงกวา / ต้นหอม",cuisine:"thai",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"เมนูสำหรับคนอยากกินข้าวเฉยๆ แต่ไม่กล้าสั่งข้าวเปล่า"},
+  {name:"ข้าวมันไก่ทอด",meat:"ไก่ทอด / ไก่ต้ม",side:"น้ำซุป / น้ำจิ้มเต้าเจี้ยว",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"เลือกไก่ทอดทั้งที่รู้ว่าไก่ต้มดีต่อสุขภาพกว่า เข้าใจได้"},
+  {name:"ก๋วยเตี๋ยวเรือ",meat:"หมู / เนื้อ / ลูกชิ้น",side:"เกี๊ยว / ผักลวก",cuisine:"thai",budget:"low",mood:["soup","spicy"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:false,tier:"n",roast:"ชามเดียวเอาอยู่ไหม คำถามที่คุณรู้คำตอบดีอยู่แล้ว"},
+  {name:"ก๋วยจั๊บน้ำข้น",meat:"หมูกรอบ / เครื่องใน",side:"ไข่ต้ม",cuisine:"thai",budget:"low",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"r",roast:"น้ำซุปพริกไทยฉุนๆ เหมาะกับคนอยากร้องไห้แบบมีข้ออ้าง"},
+  {name:"ส้มตำไก่ย่าง",meat:"ไก่ย่าง",side:"ข้าวเหนียว",cuisine:"thai",budget:"low",mood:["spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"แซ่บจนลืมไปชั่วขณะว่าพรุ่งนี้ยังต้องตื่นไปทำงาน"},
+  {name:"ข้าวไข่เจียวทรงเครื่อง",meat:"หมูสับ / กุ้งสับ",side:"ข้าวสวย / น้ำพริก",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"งบเหลือน้อยแต่ศักดิ์ศรียังเต็ม ไข่เจียวเข้าใจคุณดี"},
+  {name:"โจ๊กหมูสับ",meat:"หมูสับ / ไข่เยี่ยวม้า",side:"ปาท่องโก๋",cuisine:"thai",budget:"low",mood:["soup"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"ไม่ได้ป่วย แต่ก็ไม่ได้อยากเคี้ยวอะไรเหมือนกัน รับทราบ"},
+  {name:"ข้าวต้มกุ๊ย",meat:"ปลา / หมู / กุ้ง",side:"ผักกาดดอง / ไข่เค็ม",cuisine:"thai",budget:"low",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"กินคลีนหนึ่งมื้อ ทดแทนของทอดทั้งสัปดาห์ คณิตศาสตร์ที่ไม่ลงตัว"},
+  {name:"ผัดไทยกุ้งสด",meat:"กุ้งสด / ไก่ / เต้าหู้",side:"ถั่วงอก / ใบกุยช่าย",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"r",roast:"นักท่องเที่ยวสั่งเพราะเห็นในรูป คุณสั่งเพราะหิว ต่างกันแค่นั้น"},
+  {name:"ราดหน้าหมูหมัก",meat:"หมูหมัก / ทะเล / เต้าหู้",side:"คะน้า",cuisine:"thai",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"น้ำราดข้นๆ ที่พิสูจน์ว่าผักก็พอกินได้ ถ้าจมอยู่ในแป้ง"},
+  {name:"ข้าวหมกไก่",meat:"ไก่ต้ม / ไก่ทอด",side:"น้ำจิ้มสีเขียว / แตงกวา",cuisine:"thai",budget:"low",mood:["spicy","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"r",roast:"หอมเครื่องเทศจนโต๊ะข้างๆ รู้ทันทีว่าคุณสั่งอะไร"},
+  {name:"ไก่ทอดหาดใหญ่",meat:"ไก่ทอด",side:"ข้าวเหนียว / หอมเจียว",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"r",roast:"กรอบนอกนุ่มใน คำอธิบายที่จริงๆ ไม่ต้องมีก็ได้"},
+  {name:"ผัดผักรวมเต้าหู้",meat:"เต้าหู้ทอด / เต้าหู้แข็ง",side:"ข้าวสวย",cuisine:"thai",budget:"low",mood:["full"],isHalal:true,isVegan:true,isHighProtein:false,isNoMeat:true,tier:"n",roast:"เลือกเมนูสุขภาพหนึ่งครั้ง ให้ความรู้สึกผิดได้พักบ้าง"},
+  {name:"ข้าวขาหมู",meat:"ขาหมู / คากิ",side:"ไข่พะโล้ / ผักกาดดอง",cuisine:"thai",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"r",roast:"หนังหมูเด้งๆ กับคำสัญญาว่าจะออกกำลังกายพรุ่งนี้"},
+  {name:"ข้าวหมูแดงหมูกรอบ",meat:"หมูแดง / หมูกรอบ",side:"ไข่ต้ม / น้ำราดหวาน",cuisine:"thai",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"สีแดงนั่นไม่ใช่ของธรรมชาติ แต่ความอร่อยไม่เคยเกี่ยงอยู่แล้ว"},
+  {name:"น้ำตกหมู",meat:"หมูย่าง",side:"ข้าวเหนียว / ผักสด",cuisine:"thai",budget:"low",mood:["spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"เผ็ดระดับที่คุณยืนยันเองว่าไหว ก่อนจะค่อยๆ เงียบไป"},
+  {name:"ลาบหมู",meat:"หมูสับ",side:"ข้าวเหนียว / ผักแกล้ม",cuisine:"thai",budget:"low",mood:["spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"สายอีสานไม่เคยพลาดลาบ มื้อไหนก็แซ่บได้เท่ากัน"},
+  {name:"ข้าวคลุกกะปิ",meat:"กุ้งแห้ง / หมูหวาน / ไข่ฝอย",side:"มะม่วงเปรี้ยว / พริกขี้หนู",cuisine:"thai",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"เครื่องเยอะจนต้องคลุกนาน แต่พอคลุกเสร็จก็หมดในห้าคำ"},
+  {name:"คั่วกลิ้งหมู",meat:"หมูสับ / หมูบด",side:"ข้าวสวย / ผักสด",cuisine:"thai",budget:"low",mood:["spicy","fried"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"เผ็ดร้อนเครื่องแกงใต้ กินคำเดียวก็แยกได้ว่าใครไม่ใช่สายเผ็ดจริง"},
+  // ── THAI · งบเยอะ ──
+  {name:"หมูกระทะ",meat:"สามชั้น / คอหมู / หมูหมัก",side:"ผัก / วุ้นเส้น / ไข่",cuisine:"thai",budget:"mid",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"กลิ่นติดเสื้อกลับบ้าน ของแถมที่ไม่มีใครขอ"},
+  {name:"ชาบู",meat:"หมู / เนื้อ / ทะเล",side:"ผัก / เต้าหู้ / เห็ด",cuisine:"thai",budget:"mid",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,tier:"sr",roast:"จุ่มเอง สุกเอง อิ่มเอง ความรับผิดชอบเต็มรูปแบบ"},
+  {name:"อาหารทะเลเผา",meat:"กุ้งแม่น้ำ / ปูนิ่ม / หอยแมลงภู่",side:"น้ำจิ้มซีฟู้ด",cuisine:"thai",budget:"mid",mood:["spicy","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"กุ้งตัวโตจนรู้สึกว่าวันนี้ทำดีมาพอแล้ว"},
+  {name:"ข้าวซอยไก่",meat:"ไก่ / เนื้อเปื่อย",side:"ผักดอง / หอมแดง / มะนาว",cuisine:"thai",budget:"mid",mood:["soup","spicy","full"],isHalal:true,isVegan:false,isHighProtein:false,isNoMeat:false,tier:"sr",roast:"เส้นกรอบโปะมาเพื่อความหล่อ ไม่ได้มีไว้ให้กินสะดวก"},
+  {name:"ข้าวปลากะพงทอดน้ำปลา",meat:"ปลากะพง",side:"ข้าวสวย / น้ำจิ้มซีฟู้ด",cuisine:"thai",budget:"mid",mood:["spicy","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"ปลาเค็มๆ หวานๆ ที่ทำให้ข้าวหายไปหม้อหนึ่งโดยไม่รู้ตัว"},
+  {name:"ต้มแซ่บซี่โครงหมู",meat:"ซี่โครงหมู",side:"ผัก / ข้าวสวย",cuisine:"thai",budget:"mid",mood:["soup","spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"น้ำซุปแดงเดือดๆ เผ็ดจนพูดไม่ออก แต่ยังสั่งเพิ่ม"},
+  {name:"ต้มยำกุ้งน้ำข้น",meat:"กุ้งแม่น้ำ / ซีฟู้ด",side:"เห็ด / ข้าวสวย",cuisine:"thai",budget:"mid",mood:["soup","spicy"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"เปรี้ยวเผ็ดหอมสมุนไพร ของที่ฝรั่งกินแล้วต้องหยุดถ่ายรูป"},
+  {name:"แกงเขียวหวานไก่",meat:"ไก่ / ลูกชิ้นปลา",side:"ข้าวสวย / โรตี / ขนมจีน",cuisine:"thai",budget:"mid",mood:["spicy","full"],isHalal:true,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"sr",roast:"เขียวหวานแต่ไม่ได้หวานอย่างที่ชื่อพยายามโฆษณา"},
+  {name:"ผัดสะตอกุ้ง",meat:"กุ้ง / หมูสับ",side:"ข้าวสวย",cuisine:"thai",budget:"mid",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"กลิ่นสะตอติดตัวไปอีกวัน อย่างน้อยคนรอบข้างก็รู้ว่าคุณกินดี"},
+  {name:"ข้าวผัดต้มยำทะเล",meat:"กุ้ง / ทะเล / ไก่",side:"มะนาว / ผักชี",cuisine:"thai",budget:"mid",mood:["spicy","fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"เปรี้ยวเผ็ดในจานเดียว สำหรับคนที่เลือกระหว่างต้มยำกับข้าวผัดไม่ได้"},
+  // ── THAI · งบเยอะมาก ──
+  {name:"บุฟเฟต์ซีฟู้ดพรีเมียม",meat:"ล็อบสเตอร์ / ปูอลาสก้า / หอยเชลล์",side:"น้ำจิ้มซีฟู้ด",cuisine:"thai",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"กินให้คุ้มค่าตัว ไม่งั้นมันจะกลายเป็นค่าเทอมที่เปล่าประโยชน์"},
+  {name:"ปูไข่ดองเจ้าดัง",meat:"ปูดองซีอิ๊ว / กุ้งดอง",side:"ข้าวสวยร้อน",cuisine:"thai",budget:"high",mood:["spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"ข้าวจานเดียวหายไปสามจาน นี่แหละราคาของความอร่อย"},
+  {name:"Fine Seafood",meat:"ล็อบสเตอร์เผา / ปูม้านึ่ง",side:"น้ำจิ้มซีฟู้ด",cuisine:"thai",budget:"high",mood:["full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"ทะเลสดราคาสูง แต่รูปที่ได้ลงสตอรี่ก็พอถือว่าคุ้ม"},
+  // ── THAI · เหนือ ──
+  {name:"ขนมจีนน้ำเงี้ยว",meat:"ซี่โครงหมู / เลือดหมู",side:"ผักกาดดอง / แคบหมู",cuisine:"thai",budget:"low",mood:["soup","spicy"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"r",roast:"เส้นขนมจีนราดน้ำเงี้ยว เผ็ดอุ่นแบบคนเหนือที่ไม่พูดเยอะ"},
+  {name:"แกงฮังเล",meat:"หมูสามชั้น / ขิง",side:"ข้าวเหนียว",cuisine:"thai",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"r",roast:"หวานเค็มมันแบบเหนือแท้ กินกับข้าวเหนียวแล้วเงียบไปเลย"},
+  {name:"ไส้อั่ว",meat:"ไส้อั่วหมู",side:"ข้าวเหนียว / น้ำพริกหนุ่ม",cuisine:"thai",budget:"low",mood:["fried","spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"r",roast:"หอมตะไคร้สมุนไพร ทอดจนหนังแตก มื้อที่ไม่ต้องมีเหตุผล"},
+  {name:"น้ำพริกหนุ่มแคบหมู",meat:"แคบหมู",side:"ผักลวก / ข้าวเหนียว",cuisine:"thai",budget:"low",mood:["spicy"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"เผ็ดพริกหนุ่มกับแคบหมูกรอบ ความเรียบง่ายที่อิ่มได้จริง"},
+  // ── THAI · อีสาน ──
+  {name:"ก้อยกุ้ง",meat:"กุ้งสด",side:"ข้าวเหนียว / ผักแกล้ม",cuisine:"thai",budget:"low",mood:["spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"r",roast:"สดจนต้องมั่นใจในร้าน แซ่บจนต้องมั่นใจในตัวเอง"},
+  {name:"ซุปหน่อไม้",meat:"หน่อไม้ / ใบย่านาง",side:"ข้าวเหนียว",cuisine:"thai",budget:"low",mood:["spicy"],isHalal:false,isVegan:true,isHighProtein:false,isNoMeat:true,tier:"n",roast:"กลิ่นแรงรสจัด เมนูที่คนกินด้วยกันต้องชอบเหมือนกัน"},
+  {name:"อ่อมหมู",meat:"หมู / เครื่องใน",side:"ข้าวเหนียว / ผักชีลาว",cuisine:"thai",budget:"low",mood:["soup","spicy"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"ต้มเครื่องในใส่ผักจัดเต็ม หอมจนลืมไปว่ากินอะไรอยู่"},
+  {name:"ไก่ย่างข้าวเหนียวส้มตำ",meat:"ไก่ย่าง",side:"ข้าวเหนียว / ส้มตำ",cuisine:"thai",budget:"low",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"เซตในตำนานที่ไม่เคยทำให้ผิดหวัง ยกเว้นตอนเผ็ดเกิน"},
+  {name:"ลาบเป็ด",meat:"เป็ดสับ",side:"ข้าวเหนียว / ผักแกล้ม",cuisine:"thai",budget:"mid",mood:["spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"r",roast:"ลาบที่อัปเกรดเป็นเป็ด สำหรับวันที่อยากพิเศษกว่าหมู"},
+  {name:"ต้มเล้งแซ่บ",meat:"กระดูกหมูอ่อน",side:"ข้าวสวย / ผัก",cuisine:"thai",budget:"mid",mood:["soup","spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"r",roast:"แทะกระดูกอ่อนให้สุดซอย เผ็ดร้อนจนเหงื่อแทนคำพูด"},
+  {name:"หมูย่างเกลือจิ้มแจ่ว",meat:"คอหมูย่าง",side:"ข้าวเหนียว / แจ่ว",cuisine:"thai",budget:"low",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"เกลือล้วนๆ แต่จิ้มแจ่วแล้วเข้าใจว่าทำไมไม่ต้องปรุงเยอะ"},
+  // ── THAI · ใต้ ──
+  {name:"แกงไตปลา",meat:"ปลาย่าง / กุ้ง",side:"ข้าวสวย / ผักเหนาะ",cuisine:"thai",budget:"mid",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"sr",roast:"เผ็ดร้อนระดับใต้แท้ ใครไหวถือว่าผ่านด่าน"},
+  {name:"ข้าวยำปักษ์ใต้",meat:"กุ้งแห้ง / ปลาป่น",side:"น้ำบูดู / ผักซอย",cuisine:"thai",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"r",roast:"คลุกผักสารพัดกับน้ำบูดู สุขภาพดีแบบที่ไม่ได้ตั้งใจ"},
+  {name:"คั่วกลิ้งไก่",meat:"ไก่สับ",side:"ข้าวสวย / ใบมะกรูด",cuisine:"thai",budget:"low",mood:["spicy","fried"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"เผ็ดเครื่องแกงจัดจ้าน เวอร์ชันไก่สำหรับคนเลี่ยงหมู"},
+  {name:"ผัดเผ็ดปลาดุก",meat:"ปลาดุก",side:"ข้าวสวย / ใบกะเพรา",cuisine:"thai",budget:"low",mood:["spicy","fried"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"เผ็ดร้อนกลิ่นเครื่องแกง กินข้าวเพลินจนลืมนับจาน"},
+  {name:"แกงส้มชะอมไข่",meat:"กุ้ง / ปลา",side:"ข้าวสวย / ชะอมไข่",cuisine:"thai",budget:"low",mood:["soup","spicy"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"เปรี้ยวเผ็ดกลมกล่อม เมนูบ้านๆ ที่คิดถึงทุกที"},
+  // ── THAI · กลาง / ตามสั่ง / เส้น ──
+  {name:"ผัดพริกแกงหมูกรอบ",meat:"หมูกรอบ",side:"ข้าวสวย / ถั่วฝักยาว",cuisine:"thai",budget:"low",mood:["spicy","fried"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"หมูกรอบผัดพริกแกง เผ็ดมันกรอบครบในจานเดียว"},
+  {name:"ข้าวไข่ข้นกุ้ง",meat:"กุ้ง / ปู",side:"ข้าวสวย",cuisine:"thai",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"r",roast:"ไข่ข้นนุ่มราดข้าว ความฟินที่ดูแพงกว่าที่จ่ายจริง"},
+  {name:"ก๋วยเตี๋ยวคั่วไก่",meat:"ไก่ / ไข่",side:"พริกน้ำส้ม",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"เส้นใหญ่คั่วไฟแรง หอมกระทะแบบที่เตาบ้านทำไม่ได้"},
+  {name:"ผัดซีอิ๊วหมู",meat:"หมู / ไก่",side:"พริกน้ำส้ม",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"เส้นผัดซีอิ๊วดำๆ ธรรมดาที่ไม่เคยน่าเบื่อ"},
+  {name:"ข้าวคลุกน้ำพริกลงเรือ",meat:"หมูหวาน / กุ้ง",side:"ผักสด / ไข่เค็ม",cuisine:"thai",budget:"low",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"r",roast:"เครื่องเยอะรสจัด คลุกทีเดียวอิ่มทั้งความเผ็ดและความสุข"},
+  {name:"ข้าวผัดน้ำพริกปลาทู",meat:"ปลาทู",side:"ผักสด / ไข่ดาว",cuisine:"thai",budget:"low",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"ข้าวผัดน้ำพริกกับปลาทูทอด บ้านๆ แต่หยุดกินไม่ได้"},
+  {name:"ผัดกะเพราทะเล",meat:"กุ้ง / หมึก / ทะเล",side:"ข้าวสวย / ไข่ดาว",cuisine:"thai",budget:"mid",mood:["spicy","fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"กะเพราเวอร์ชันอัปเกรด สำหรับวันที่กระเป๋าใจดีขึ้นนิด"},
+  {name:"ต้มข่าไก่",meat:"ไก่",side:"ข้าวสวย / เห็ด",cuisine:"thai",budget:"low",mood:["soup"],isHalal:true,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"กะทิหอมข่าตะไคร้ ซดอุ่นๆ แล้วใจเย็นลงได้จริง"},
+  {name:"พะโล้ไข่หมูสามชั้น",meat:"หมูสามชั้น / ไข่",side:"ข้าวสวย / ผักกาดดอง",cuisine:"thai",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"หวานเค็มกลิ่นพะโล้ ราดข้าวแล้วไม่ต้องการอะไรอีก"},
+  {name:"ข้าวหน้าไก่",meat:"ไก่ / เห็ดหอม",side:"น้ำซุป",cuisine:"thai",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"ราดข้าวแบบเรียบง่าย เมนูปลอดภัยของวันที่ไม่อยากเสี่ยง"},
+  {name:"สุกี้แห้ง/น้ำ",meat:"หมู / ทะเล / รวม",side:"วุ้นเส้น / ไข่",cuisine:"thai",budget:"low",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"สุกี้จานด่วน เผ็ดน้ำจิ้มเต้าหู้ยี้ตามใจชอบ"},
+  {name:"ข้าวหมูทอดกระเทียม",meat:"หมูทอด",side:"ข้าวสวย / น้ำจิ้ม",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"หมูทอดกระเทียมหอมๆ จานเดียวจบ ไม่ต้องคิดมาก"},
+  {name:"ยำรวมมิตรทะเล",meat:"กุ้ง / หมึก / ปูอัด",side:"ผักสด",cuisine:"thai",budget:"mid",mood:["spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"r",roast:"เปรี้ยวเผ็ดจัดจ้าน ยำทีเหมือนปลุกทุกประสาทให้ตื่น"},
+  {name:"ข้าวเหนียวหมูปิ้ง",meat:"หมูปิ้ง",side:"ข้าวเหนียว",cuisine:"thai",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"มื้อเช้าในตำนาน ราคาเบาๆ แต่ความสุขไม่เบา"},
+  {name:"ก๋วยเตี๋ยวต้มยำหมูสับ",meat:"หมูสับ / ลูกชิ้น",side:"ถั่วลิสง / ผัก",cuisine:"thai",budget:"low",mood:["soup","spicy"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"ต้มยำน้ำข้นใส่ทุกอย่าง เปรี้ยวเผ็ดหวานครบในชามเดียว"},
+  {name:"แกงเทโพหมูสามชั้น",meat:"หมูสามชั้น / ผักบุ้ง",side:"ข้าวสวย",cuisine:"thai",budget:"mid",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"r",roast:"เปรี้ยวหวานเผ็ดกลมกล่อม เมนูที่ผักบุ้งได้ฉายแสง"},
+  {name:"ปลาทูทอดน้ำปลาหวาน",meat:"ปลาทู",side:"ข้าวสวย / ผักสด",cuisine:"thai",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"ปลาทูทอดกับน้ำปลาหวาน ความอร่อยที่ไม่ต้องพยายาม"},
+  {name:"ข้าวต้มปลากะพง",meat:"ปลากะพง",side:"ขิงซอย / กระเทียมเจียว",cuisine:"thai",budget:"mid",mood:["soup","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"r",roast:"ข้าวต้มปลาร้อนๆ เบาท้องแต่ไม่เบารสชาติ"},
+  {name:"ขนมจีนน้ำยาปู",meat:"ปูแกะ / กุ้ง",side:"ผักเหนาะ / ไข่ต้ม",cuisine:"thai",budget:"mid",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"sr",roast:"น้ำยาปูเข้มข้น เวอร์ชันที่จ่ายแพงขึ้นเพื่อความหรู"},
+  // ── JAPANESE · งบปกติ ──
+  {name:"ยากิโซบะ",meat:"หมู / ซีฟู้ด / ผัก",side:"ขิงดอง / โนริ",cuisine:"jp",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"r",roast:"เส้นผัดซอสเข้ม กินทั้งจานแล้วยังรู้สึกว่ายังไม่พอ"},
+  {name:"โอนิกิริ",meat:"ทูน่ามาโย / แซลมอน / อูเมะ",side:"สาหร่าย",cuisine:"jp",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"กินง่ายพกสะดวก แต่จะอิ่มต้องสั่งหลายก้อน คณิตศาสตร์ง่ายๆ"},
+  {name:"กิวด้ง",meat:"เนื้อสไลซ์ / ไข่ออนเซ็น",side:"ขิงดอง / ซุปมิโซะ",cuisine:"jp",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,tier:"r",roast:"ข้าวหน้าเนื้อที่กินหมดชามก่อนจะทันคิดว่าอิ่มหรือยัง"},
+  // ── JAPANESE · งบเยอะ ──
+  {name:"ราเมน",meat:"ทงคตสึ / โชยุ / มิโซะ",side:"ไข่ต้ม / ชาชู / โนริ",cuisine:"jp",budget:"mid",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"ซดเส้นให้ดัง คนญี่ปุ่นบอกว่าสุภาพ คนไทยบอกว่าหิว"},
+  {name:"ทงคัตสึ",meat:"ซี่โครง / สันนอก / ฮิเระ",side:"กะหล่ำซอย / ข้าวญี่ปุ่น",cuisine:"jp",budget:"mid",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"หมูทอดกรอบกับซอสข้นๆ ความสุขที่ไม่ต้องคิดอะไรมาก"},
+  {name:"เทมปุระ",meat:"กุ้ง / ผัก / ปลา",side:"น้ำจิ้มเทนสึยุ / ข้าว",cuisine:"jp",budget:"mid",mood:["fried"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"sr",roast:"ชุบแป้งทอดทุกอย่างแล้วมันก็อร่อยขึ้นจริง วิทยาศาสตร์ยอมรับ"},
+  {name:"ซูชิสายพาน",meat:"แซลมอน / ทูน่า / อีล",side:"ขิงดอง / ซุปมิโซะ",cuisine:"jp",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"จานละนิดละหน่อย รวมกันทีจ่ายเท่าค่าเช่าห้องครึ่งวัน"},
+  {name:"อุด้ง/โซบะ",meat:"เทมปุระ / ไก่",side:"โนริ / ต้นหอม",cuisine:"jp",budget:"mid",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"เส้นหนานุ่ม เคี้ยวช้าๆ เหมือนชีวิตที่ไม่ควรรีบ"},
+  {name:"ดอนบุริ",meat:"คัตสึดอน / โอยาโกะดอน",side:"ซุปมิโซะ / ผักดอง",cuisine:"jp",budget:"mid",mood:["full","fried"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"ข้าวหน้าอะไรก็อิ่ม กินเสร็จง่วงทันที วงจรที่คุ้นเคย"},
+  {name:"ข้าวแกงกะหรี่ญี่ปุ่น",meat:"หมูทอด / ไก่ทอด",side:"ผักดอง / ข้าวญี่ปุ่น",cuisine:"jp",budget:"mid",mood:["full","fried"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"แกงข้นๆ ราดทุกอย่างแล้วมันก็เข้ากันไปหมด ไม่ต้องคิดเยอะ"},
+  {name:"เกี๊ยวซ่า",meat:"หมูสับ / กุ้ง / ผัก",side:"ซอสน้ำส้ม / ข้าว",cuisine:"jp",budget:"mid",mood:["fried"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"จานเล็กที่สั่งเพิ่มทุกครั้ง เพราะหนึ่งจานไม่เคยพอ"},
+  // ── JAPANESE · งบเยอะมาก ──
+  {name:"โอมากาเสะ",meat:"ฝากเชฟจัดเต็มตามฤดูกาล",side:"",cuisine:"jp",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"จ่ายแพงเพื่อให้คนอื่นเลือกให้ บางทีนั่นคือความหรูที่แท้จริง"},
+  {name:"ชาบูพรีเมียม",meat:"หมูคุโรบูตะ / เนื้อวากิว",side:"ผักรวม / เต้าหู้",cuisine:"jp",budget:"high",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,tier:"ssr",roast:"บริการระดับเทพ แต่บิลตอนจบก็เทพไม่แพ้กัน"},
+  {name:"เนื้อวากิวย่าง",meat:"A5 / ดรายเอจ / ริบอาย",side:"วาซาบิ / เกลือทรัฟเฟิล",cuisine:"jp",budget:"high",mood:["full","fried"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,tier:"ssr",roast:"ละลายในปาก พร้อมกับเงินที่ละลายในกระเป๋า"},
+  // ── KOREAN · งบปกติ ──
+  {name:"ต็อกบกกี",meat:"ซอสแดง / ชีส / โรเซ่",side:"ลูกชิ้นปลา / ไข่ต้ม",cuisine:"kr",budget:"low",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"sr",roast:"เผ็ดหวานเหนียว กินคนเดียวหมดหม้อแบบไม่ต้องมีพยาน"},
+  {name:"จาจังมยอน",meat:"ซอสถั่วดำ / หมู",side:"ไชเท้าดอง",cuisine:"kr",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"r",roast:"เส้นดำๆ หน้าตาน่ากลัว แต่กินแล้วก็เข้าใจว่าทำไมคนถึงติด"},
+  {name:"บะหมี่เกาหลีต้ม",meat:"ซินราเมียน / บูลดัก",side:"ไข่ดาว / คิมจิ",cuisine:"kr",budget:"low",mood:["soup","spicy"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"หนึ่งซองราคาไม่ถึงสามสิบ แต่ความเผ็ดประเมินค่าไม่ได้"},
+  // ── KOREAN · งบเยอะ ──
+  {name:"ไก่ทอดเกาหลี",meat:"ซอสฮอตตอก / ครีมชีส / ออริจินัล",side:"ไชเท้าดอง",cuisine:"kr",budget:"mid",mood:["fried","spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"กรอบจนสะท้อนแสง กินคู่ไชเท้าดองแล้วลืมเรื่องแคลอรีไปเลย"},
+  {name:"ปิ้งย่างเกาหลี",meat:"สามชั้น / คอหมู / ซัมกยอบซัล",side:"ผักห่อ / คิมจิ",cuisine:"kr",budget:"mid",mood:["full","fried"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"ย่างเองห่อเอง รสชาติดีขึ้นเพราะคุณลงแรง อย่างน้อยก็คิดอย่างนั้น"},
+  {name:"บิบิมบับ",meat:"ไข่ดาว / เนื้อสับ / เต้าหู้",side:"ผักรวม / โคชูจัง",cuisine:"kr",budget:"mid",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:false,tier:"n",roast:"คลุกให้เข้ากันก่อนกิน เหมือนพยายามจัดชีวิตที่ยุ่งเหยิงให้ลงตัว"},
+  {name:"ซุนดูบูจิเก",meat:"เต้าหู้นิ่ม / หอย / หมู",side:"ข้าวสวย / คิมจิ",cuisine:"kr",budget:"mid",mood:["soup","spicy","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"ซุปเต้าหู้เดือดพล่าน เผ็ดพอแล้วก็ยังซดต่ออยู่ดี"},
+  {name:"คิมบับ",meat:"ทูน่า / ไข่ / หมู / ผัก",side:"ไชเท้าดอง",cuisine:"kr",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"หน้าตาเหมือนซูชิ แต่ราคาเป็นมิตรกับชีวิตมากกว่า"},
+  {name:"ทตป๊อกกีสตรีท",meat:"ต๊อกบกกี / ซุนแด / โอเด้ง",side:"น้ำจิ้ม",cuisine:"kr",budget:"mid",mood:["spicy","soup"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"สตรีทฟู้ดที่กินทั้งคืนก็ยังรู้สึกว่ายังไม่อิ่มใจ"},
+  {name:"คิมจิจิเก",meat:"หมูสามชั้น / เต้าหู้",side:"ข้าวสวย / สาหร่าย",cuisine:"kr",budget:"mid",mood:["soup","spicy"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"ซุปคิมจิเปรี้ยวเผ็ดอุ่นๆ เหมาะกับวันที่ไม่อยากเจอใคร"},
+  // ── KOREAN · งบเยอะมาก ──
+  {name:"ปูไข่ดองเกาหลี",meat:"คันจังเกจัง / ซอสเผ็ด",side:"ข้าวสวยร้อน / สาหร่าย",cuisine:"kr",budget:"high",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"ข้าวจานที่แพงที่สุดในจักรวาล และคุณก็ยังขอเติมข้าว"},
+  {name:"บุฟเฟต์เกาหลีพรีเมียม",meat:"หมูคุโรบูตะ / เนื้อวากิว / ทะเล",side:"ผักห่อ / คิมจิ",cuisine:"kr",budget:"high",mood:["full","fried"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,tier:"ssr",roast:"จ่ายครั้งเดียวกินทั้งคืน คุ้มถ้ากระเพาะไม่ยอมแพ้ก่อน"},
+  // ── CHINESE · จีน ──
+  {name:"หม่าล่าสายพาน",meat:"เนื้อ / หมู / ลูกชิ้น",side:"ผัก / เต้าหู้ / เห็ด",cuisine:"cn",budget:"mid",mood:["spicy","soup","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,tier:"sr",roast:"หยิบเพลินตามสายพาน จนตอนคิดเงินถึงรู้ว่าหยิบไปเท่าไหร่"},
+  {name:"ติ่มซำ",meat:"ฮะเก๋า / ขนมจีบ / ซาลาเปา",side:"จิ๊กโฉ่ว / น้ำชา",cuisine:"cn",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"r",roast:"จานเล็กๆ ที่สั่งเพลินจนลืมว่าหลายจานรวมกันก็ไม่เล็กแล้ว"},
+  {name:"ก๋วยเตี๋ยวเนื้อตุ๋น",meat:"เนื้อเปื่อย / เอ็น / ลูกชิ้น",side:"ผักลวก / ซีอิ๊ว",cuisine:"cn",budget:"low",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:false,tier:"sr",roast:"น้ำซุปตุ๋นยาจีนหอมๆ อบอุ่นเหมือนได้รับการดูแลโดยไม่ต้องขอ"},
+  {name:"เป็ดย่างกวางตุ้ง",meat:"เป็ดย่าง / หนังกรอบ",side:"น้ำจิ้มบ๊วย / ข้าว",cuisine:"cn",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"หนังเป็ดกรอบมันๆ เมนูที่ทำให้ลืมไปว่าเคยพูดเรื่องลดน้ำหนัก"},
+  {name:"ข้าวหน้าเป็ด",meat:"เป็ดพะโล้ / เป็ดย่าง",side:"ผักกวางตุ้ง / น้ำซุป",cuisine:"cn",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"ข้าวหน้าเป็ดราดน้ำเข้มๆ จานเดียวจบ ไม่ต้องคิดต่อ"},
+  {name:"เป็ดปักกิ่ง",meat:"เป็ดปักกิ่ง / แป้งห่อ",side:"ต้นหอม / ซอสเทียนเมี่ยน",cuisine:"cn",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"ห่อแป้งเองทีละคำ ความหรูที่ต้องลงแรงนิดหน่อย"},
+  {name:"หม่าล่าทั่ง",meat:"เนื้อ / หมู / ทะเล",side:"ผัก / วุ้นเส้น",cuisine:"cn",budget:"mid",mood:["spicy","soup"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,tier:"sr",roast:"เผ็ดชาลิ้นแบบเสฉวน เหมาะกับคนที่อยากรู้สึกอะไรสักอย่าง"},
+  // ── WESTERN · งบปกติ ──
+  {name:"เบอร์เกอร์ฟาสต์ฟู้ด",meat:"บีฟ / ไก่ / ฟิชเชอร์",side:"เฟรนช์ฟราย / น้ำอัดลม",cuisine:"west",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,tier:"n",roast:"ไม่ต้องคิดมาก เดินเข้าสั่งเลย ชีวิตควรง่ายแบบนี้บ้าง"},
+  {name:"เคบับ/ชาวาม่า",meat:"ไก่ / เนื้อ / ผักรวม",side:"ซอสกระเทียม / ขนมปังพิตา",cuisine:"west",budget:"low",mood:["full","spicy"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:false,tier:"n",roast:"อาหารริมทางที่ทำให้รู้สึกเหมือนเดินทางไกลโดยไม่ต้องจ่ายค่าตั๋ว"},
+  {name:"แซนด์วิช/ซับมารีน",meat:"BLT / คลับ / ทูน่า",side:"มันฝรั่ง / สลัด",cuisine:"west",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"แค่หนีบของไว้ระหว่างขนมปัง ก็ดูเหมือนจัดการชีวิตได้ขึ้นมาทันที"},
+  {name:"ทาโก้/เบอริโต้",meat:"เนื้อบด / ไก่ / ถั่ว",side:"กัวคาโมเล / ซัลซา",cuisine:"west",budget:"low",mood:["full","spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,tier:"r",roast:"ม้วนทุกอย่างรวมกัน แล้วภาวนาว่ามันจะไม่หกตอนกัดคำแรก"},
+  // ── WESTERN · งบเยอะ ──
+  {name:"พิซซ่า",meat:"ฮาวายเอียน / เปปเปอโรนี / ซีฟู้ด",side:"เฟรนช์ฟราย / สลัด",cuisine:"west",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"สั่งถาดใหญ่ไว้ก่อน ที่เหลือพรุ่งนี้ค่อยอุ่น แผนที่ไม่เคยพลาด"},
+  {name:"เบอร์เกอร์เนื้อ",meat:"ชีสเบอร์เกอร์ / เบคอน / มัชรูม",side:"เฟรนช์ฟราย",cuisine:"west",budget:"mid",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,tier:"sr",roast:"เนื้อฉ่ำชีสเยิ้ม กินคำใหญ่ๆ แล้วค่อยรู้สึกผิดทีหลัง"},
+  {name:"สเต็กหมู/ไก่",meat:"สเต็กหมู / ไก่กริลล์",side:"มันบด / สลัด / ซอสพริกไทย",cuisine:"west",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"สเต็กไม่ต้องเป็นเนื้อวัวก็อร่อยได้ ราคาก็เป็นมิตรกว่าด้วย"},
+  {name:"พาสต้า",meat:"คาร์โบนารา / อราเบียตา / วองโกเล",side:"ขนมปังกระเทียม",cuisine:"west",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"ม้วนเส้นให้สวยก่อนกิน จะได้รู้สึกว่าตัวเองยังมีคลาสอยู่บ้าง"},
+  {name:"ไก่ทอดฟาสต์ฟู้ด",meat:"KFC / Popeyes / MOS",side:"เฟรนช์ฟราย / สลัดกะหล่ำ",cuisine:"west",budget:"mid",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"เร็วทั้งกินเร็วทั้งอิ่ม ประสิทธิภาพที่ร่างกายอาจไม่ขอบคุณ"},
+  {name:"ฟิชแอนด์ชิปส์",meat:"ปลาทอด / กุ้งทอด",side:"มันฝรั่งทอด / ซอสทาร์ทาร์",cuisine:"west",budget:"mid",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"ปลาทอดกับมันฝรั่ง คู่หูที่อังกฤษภูมิใจนำเสนอแบบไม่ซับซ้อน"},
+  {name:"สลัดอกไก่/แซลมอน",meat:"อกไก่ย่าง / แซลมอน / ไข่ต้ม",side:"ผักสลัด / น้ำสลัด",cuisine:"west",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"เลือกสลัดเพื่อชดเชยทุกมื้อที่ผ่านมา ความตั้งใจที่น่าชื่นชม"},
+  // ── WESTERN · งบเยอะมาก ──
+  {name:"สเต็กเนื้อวัวดรายเอจ",meat:"Tomahawk / Ribeye / T-Bone",side:"มันอบ / ซอสเห็ดทรัฟเฟิล",cuisine:"west",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,tier:"ssr",roast:"สายเนื้อต้องจัด จ่ายแพงทั้งทีก็ขอสุกแบบที่เชฟแนะนำ"},
+  {name:"Fine Dining",meat:"คอร์สเชฟจัดให้",side:"ไวน์ / ขนมปังอบ",cuisine:"west",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:false,tier:"ssr",roast:"จานใหญ่ อาหารชิ้นเล็ก แต่คอนเทนต์ที่ได้นั้นชิ้นใหญ่มาก"},
+  // ── รอบ 3: เติมให้ทุก combo (สัญชาติ×งบ) ≥ 5 + เมนูวีแกนสายทอด (จานหลัก ≥30฿) ──
+  // THAI · งบเยอะมาก (เติมให้ครบ 5)
+  {name:"กุ้งแม่น้ำเผายกตัว",meat:"กุ้งแม่น้ำ",side:"น้ำจิ้มซีฟู้ด / ข้าวสวย",cuisine:"thai",budget:"high",mood:["spicy","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"มันกุ้งสีส้มๆ ที่แลกมาด้วยเลขในบิลที่ไม่อยากมอง"},
+  {name:"ขันโตกพรีเมียม",meat:"แกงฮังเล / ไส้อั่ว / น้ำพริกอ่อง",side:"ข้าวเหนียว / ผักสด",cuisine:"thai",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"sr",roast:"กินเหนือครบเซตในมื้อเดียว อิ่มจนต้องนั่งพักก่อนลุก"},
+  {name:"อาหารไทยชาววัง",meat:"คอร์สเชฟจัดให้",side:"เครื่องเคียงครบเซต",cuisine:"thai",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"ssr",roast:"จานสวยจนแทบไม่กล้าแตะ แต่หิวก็คือหิว"},
+  {name:"ปลาช่อนเผาเกลือยกตัว",meat:"ปลาช่อน",side:"น้ำจิ้มแจ่ว / ผักสด",cuisine:"thai",budget:"high",mood:["spicy","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"แกะเนื้อปลาเองทีละคำ ความอดทนที่ได้รางวัลเป็นความอร่อย"},
+  // THAI · วีแกนสายทอด (จานหลัก)
+  {name:"เต้าหู้ทอดทรงเครื่องราดข้าว",meat:"เต้าหู้ทอด",side:"ข้าวสวย / น้ำจิ้มถั่ว",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:true,isVegan:true,isHighProtein:true,isNoMeat:true,tier:"n",roast:"กินเจแต่ยังได้ความกรอบ ดีต่อใจดีต่อบุญ"},
+  {name:"ข้าวผัดเจใส่เห็ด",meat:"เต้าหู้ / เห็ด / ผัก",side:"ซีอิ๊ว / พริกน้ำส้ม",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:true,isVegan:true,isHighProtein:false,isNoMeat:true,tier:"n",roast:"ข้าวผัดไร้เนื้อสัตว์ที่พิสูจน์ว่าผักก็เอาอยู่"},
+  // JAPANESE · งบปกติ (เติมให้ครบ 5)
+  {name:"เทมปุระผักรวม",meat:"ผักรวม / เห็ด / มันหวาน",side:"น้ำจิ้มเทนสึยุ / ข้าว",cuisine:"jp",budget:"low",mood:["fried"],isHalal:true,isVegan:true,isHighProtein:false,isNoMeat:true,tier:"n",roast:"ชุบแป้งทอดผัก แล้วบอกตัวเองว่ายังกินผักอยู่นะ"},
+  {name:"ออมุไรซ์",meat:"ข้าวผัดซอสมะเขือเทศ / ไก่",side:"ไข่ห่อ / สลัด",cuisine:"jp",budget:"low",mood:["full","fried"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"ข้าวห่อไข่ราดซอส น่ารักจนเกือบลืมว่าหิว"},
+  {name:"ข้าวหน้าไก่เทอริยากิ",meat:"ไก่เทอริยากิ",side:"สลัดกะหล่ำ / ข้าวญี่ปุ่น",cuisine:"jp",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"ซอสหวานเค็มราดข้าว ปลอดภัยแบบที่เลือกทุกครั้ง"},
+  // JAPANESE · งบเยอะมาก (เติมให้ครบ 5)
+  {name:"ไคเซ็นดงพรีเมียม",meat:"อูนิ / ปูทาราบะ / ไข่ปลา",side:"วาซาบิ / ข้าวญี่ปุ่น",cuisine:"jp",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"ข้าวหน้าทะเลจัดเต็ม กินคำเดียวก็รู้ว่าทำไมแพง"},
+  {name:"ข้าวหน้าเนื้อวากิว",meat:"เนื้อวากิว A5",side:"ไข่ออนเซ็น / ข้าวญี่ปุ่น",cuisine:"jp",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,tier:"ssr",roast:"เนื้อละลายในปาก ราคาก็ละลายบัญชีไปพร้อมกัน"},
+  // KOREAN · งบปกติ (เติมให้ครบ 5)
+  {name:"ต็อกบกกีเจ",meat:"ต๊อกบกกี / ผัก",side:"สาหร่าย / ต้นหอม",cuisine:"kr",budget:"low",mood:["spicy","full"],isHalal:true,isVegan:true,isHighProtein:false,isNoMeat:true,tier:"n",roast:"เผ็ดหวานเหนียวแบบไร้เนื้อสัตว์ สายเจก็ฟินได้"},
+  {name:"รามยอนต้มกิมจิ",meat:"กิมจิ / ไข่ / หมู",side:"ข้าวสวย",cuisine:"kr",budget:"low",mood:["soup","spicy"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"บะหมี่ซองอัปเกรดใส่กิมจิ อร่อยเกินราคาที่จ่าย"},
+  {name:"คิมบับทูน่ามาโย",meat:"ทูน่ามาโย / ไข่ / ผัก",side:"ไชเท้าดอง",cuisine:"kr",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"โรลข้าวกินง่าย พกไปไหนก็ได้ ไม่ต้องคิดมาก"},
+  // KOREAN · งบเยอะมาก (เติมให้ครบ 5)
+  {name:"ฮันอูบาร์บีคิว",meat:"เนื้อฮันอูเกรดพรีเมียม",side:"ผักห่อ / คิมจิ / ซัมจัง",cuisine:"kr",budget:"high",mood:["full","fried"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,tier:"ssr",roast:"เนื้อเกาหลีแท้ย่างเอง ฟินสุดจนลืมราคาต่อขีด"},
+  {name:"แฮมุลจิ่มซีฟู้ดเผ็ด",meat:"ปู / กุ้ง / หอย",side:"ข้าวสวย / ผัก",cuisine:"kr",budget:"high",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"กองซีฟู้ดผัดซอสเผ็ด แกะเปลือกจนมือเลอะแต่ใจฟู"},
+  {name:"ซัมกเยทังพรีเมียม",meat:"ไก่ตุ๋นโสมยัดข้าวเหนียว",side:"กิมจิ / เกลือพริกไทย",cuisine:"kr",budget:"high",mood:["soup","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"ซุปไก่ตุ๋นโสมบำรุงร่างกาย กินแล้วรู้สึกแข็งแรงขึ้นทันที (อาจจะ)"},
+  // CHINESE · งบปกติ (เติมให้ครบ 5)
+  {name:"ข้าวหมูแดงฮ่องกง",meat:"หมูแดง / หมูกรอบ / ชาร์ซิว",side:"ผักกวางตุ้ง / น้ำราด",cuisine:"cn",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"หมูแดงฉ่ำๆ ราดข้าว จานเดียวเอาอยู่แน่นอน"},
+  {name:"ก๋วยเตี๋ยวเป็ดตุ๋น",meat:"เป็ดตุ๋นพะโล้",side:"ผักกวางตุ้ง / เลือด",cuisine:"cn",budget:"low",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"น้ำซุปพะโล้หอมเครื่องยาจีน อุ่นท้องอุ่นใจ"},
+  {name:"บะหมี่เกี๊ยวกุ้ง",meat:"เกี๊ยวกุ้ง / หมูแดง",side:"ผักลวก / น้ำซุป",cuisine:"cn",budget:"low",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"เส้นเหนียวเกี๊ยวเด้ง น้ำซุปใสที่ไม่เคยทำให้ผิดหวัง"},
+  // CHINESE · งบเยอะ (เติมให้ครบ 5)
+  {name:"ปลานึ่งซีอิ๊ว",meat:"ปลากะพง / ปลาเก๋า",side:"ขิงซอย / ต้นหอม / ข้าว",cuisine:"cn",budget:"mid",mood:["full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"ปลานึ่งเนื้อนุ่มราดซีอิ๊ว สุขภาพดีแบบที่อร่อยด้วย"},
+  {name:"กุ้งผัดพริกเกลือ",meat:"กุ้ง",side:"ข้าวสวย / ผัก",cuisine:"cn",budget:"mid",mood:["spicy","fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"r",roast:"กรอบเค็มเผ็ดติดปลายลิ้น แกะเปลือกจนเพลินลืมเวลา"},
+  {name:"เต้าหู้หม่าโผเจ",meat:"เต้าหู้ / เห็ด",side:"ข้าวสวย",cuisine:"cn",budget:"mid",mood:["spicy","full"],isHalal:true,isVegan:true,isHighProtein:false,isNoMeat:true,tier:"n",roast:"เผ็ดชาแบบเสฉวนเวอร์ชันเจ ไม่มีเนื้อก็แซ่บได้"},
+  // CHINESE · งบเยอะมาก (เติมให้ครบ 5)
+  {name:"กระเพาะปลาน้ำแดง",meat:"กระเพาะปลา / ปู / ไก่",side:"ข้าวสวย / น้ำส้มสายชู",cuisine:"cn",budget:"high",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"ssr",roast:"ชามหรูในงานมงคล ซดร้อนๆ แล้วรู้สึกเป็นผู้ใหญ่ขึ้นมา"},
+  {name:"ติ่มซำภัตตาคาร",meat:"ฮะเก๋ากุ้ง / ขนมจีบปู / ซาลาเปาลาวา",side:"น้ำชา",cuisine:"cn",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"sr",roast:"เข่งเล็กๆ ที่สั่งเพลินจนบิลกลายเป็นเข่งใหญ่"},
+  {name:"เป๋าฮื้อตุ๋นน้ำแดง",meat:"เป๋าฮื้อ / เห็ดหอม",side:"ข้าวสวย / ผักกวางตุ้ง",cuisine:"cn",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"วัตถุดิบระดับเทพเจ้า เคี้ยวช้าๆ ให้สมกับที่จ่ายไป"},
+  {name:"กุ้งมังกรผัดพริกไทยดำ",meat:"กุ้งมังกร",side:"ข้าวผัด / ผัก",cuisine:"cn",budget:"high",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"กุ้งมังกรตัวเป้ง หอมพริกไทยดำ คุ้มค่าทุกบาทที่เสียไป"},
+  // WESTERN · งบปกติ (เติมให้ครบ 5)
+  {name:"ฟาลาเฟลแร็พ",meat:"ฟาลาเฟลถั่วทอด",side:"ผักสลัด / ฮัมมุส / แผ่นพิตา",cuisine:"west",budget:"low",mood:["fried","full"],isHalal:true,isVegan:true,isHighProtein:true,isNoMeat:true,tier:"n",roast:"ถั่วทอดห่อผัก วีแกนสายตะวันออกกลางที่อิ่มจริง"},
+  {name:"สปาเกตตี้มีทบอล",meat:"มีทบอลหมู-เนื้อ",side:"ขนมปังกระเทียม / ชีส",cuisine:"west",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,tier:"n",roast:"เส้นคลุกซอสมะเขือเทศกับมีทบอล คลาสสิกที่ไม่มีวันพลาด"},
+  // WESTERN · งบเยอะมาก (เติมให้ครบ 5)
+  {name:"ล็อบสเตอร์เธอร์มิดอร์",meat:"ล็อบสเตอร์อบชีส",side:"มันบด / สลัด",cuisine:"west",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"ล็อบสเตอร์อบเนยชีส หรูจนต้องถ่ายรูปก่อนแตะ"},
+  {name:"ออยสเตอร์บาร์",meat:"หอยนางรมสด / ซีฟู้ดทาวเวอร์",side:"มะนาว / ซอสมิญอแนต",cuisine:"west",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"ซดหอยนางรมสดทีละตัว ความหรูที่จ่ายเป็นตัวๆ"},
+  {name:"แร็คแกะย่างโรสแมรี่",meat:"แร็คแกะ",side:"มันอบ / ซอสไวน์แดง",cuisine:"west",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"sr",roast:"ซี่โครงแกะย่างหอมโรสแมรี่ มื้อพิเศษที่ดูแพงสมราคา"},
 ];
 
 // ── Constants ────────────────────────────────────────────────────────────────
 const ROAST_MSGS = [
   "",
-  "อ้าว ไม่ชอบเหรอ ลองอีกทีก็ได้นะ...",
-  "ยังอยู่อีกเหรอ? โอเค โอเค...",
-  "เลือกมากนักนะวัยรุ่น! 😤",
-  "ยังกดอยู่อีกเหรอ?!",
-  "ถ้าจะข้ามขนาดนี้ ไปต้มมาม่ากินไปซะ! 🍜"
+  "ไม่ถูกใจก็กดใหม่ได้ ระบบไม่ตัดสินคุณหรอก",
+  "ยังอยู่อีกนะ น่าสนใจดี",
+  "เลือกได้ละเอียดมาก สำหรับคนที่บอกว่าอะไรก็ได้",
+  "สุ่มมากี่รอบแล้ว ยังนับไหวอยู่ไหม",
+  "ระบบทำงานปกติทุกอย่าง ที่ลังเลคือคุณ"
 ];
 const BUDGET_LABEL  = {low:'งบปกติ', mid:'งบเยอะ', high:'งบเยอะมาก', any:'ไม่เกี่ยงงบ'};
-const CUISINE_LABEL = {thai:'🇹🇭 ไทย', jp:'🇯🇵 ญี่ปุ่น', kr:'🇰🇷 เกาหลี', west:'🍕 ตะวันตก'};
+const CUISINE_LABEL = {thai:'🇹🇭 ไทย', jp:'🇯🇵 ญี่ปุ่น', kr:'🇰🇷 เกาหลี', cn:'🥟 จีน', west:'🍕 ตะวันตก'};
+const CUISINE_NAME  = {thai:'ไทย', jp:'ญี่ปุ่น', kr:'เกาหลี', cn:'จีน', west:'ตะวันตก'};   // ชื่อล้วน (ใบเสร็จใช้คู่ธง)
+// Gacha rarity 4 ระดับ: N / R / SR / SSR (ความหายาก/ยูนีควัตถุดิบ/ช่วงราคาเบื้องหลัง — subjective)
+// canvas: g = gradient stops สำหรับตัวอักษร tier บนใบเสร็จ
+const TIER_META = {
+  n:   {label:'N',   cls:'tier-n',   stroke:'#A39E98', text:'#8A857F', g:['#8A857F','#8A857F']},
+  r:   {label:'R',   cls:'tier-r',   stroke:'#2E86DE', text:'#2E86DE', g:['#6FC3F2','#2E86DE']},
+  sr:  {label:'SR',  cls:'tier-sr',  stroke:'#9C5BF6', text:'#7B3FF2', g:['#C4A2FF','#7B3FF2']},
+  ssr: {label:'SSR', cls:'tier-ssr', stroke:'#E0A93B', text:'#C8911A', g:['#FFE9A8','#E8B23C','#B97E12']},
+};
+// สถิติทิพย์บนใบเสร็จ — ตั้งใจมั่วเพื่อความบันเทิง ไม่ใช่ข้อมูลจริง
+const FAKE_LINES = [
+  'คุณคือ 1 ใน 9,999 คนของวันนี้ที่ปล่อยให้ดวงเลือกมื้อ',
+  'ระดับความมั่นใจในการสั่ง: 87 จาก 100 (ปัดขึ้นให้)',
+  'โอกาสที่จะสั่งซ้ำพรุ่งนี้: สูงเกินกว่าจะยอมรับ',
+  'อันดับความกวนของมื้อนี้: ท็อป 3 ของจักรวาลคู่ขนาน',
+];
+// มาสคอตจิ้งจอกแซวตอนกด reroll รัวๆ
+const FOX_LINES = [
+  'อีกแล้วเหรอ',
+  'ระบบไม่ได้เอ๋อ ที่ลังเลคือคุณ',
+  'สุ่มทั้งวันก็ได้นะ ไม่รีบ',
+  'เมนูเดิมก็อร่อยอยู่นะ แค่บอก',
+  'เลือกซะที เดี๋ยวร้านปิดก่อน',
+];
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let filters      = {cuisine: 'thai', budget: 'mid'};
-let selectedMoods = new Set();
+let selectedMood  = null;   // single-select: null = อะไรก็ได้
 let specials      = new Set();
 let clickCount    = 0;
+let rerollCount   = 0;
 let currentPick   = null;
 
 // ── Streak ───────────────────────────────────────────────────────────────────
@@ -659,7 +949,7 @@ function getPool() {
   return menus.filter(m => {
     if (filters.cuisine !== 'all' && m.cuisine !== filters.cuisine) return false;
     if (filters.budget  !== 'any' && m.budget  !== filters.budget)  return false;
-    if (selectedMoods.size > 0 && ![...selectedMoods].some(md => m.mood.includes(md))) return false;
+    if (selectedMood && !m.mood.includes(selectedMood)) return false;
     if (specials.has('halal')   && !m.isHalal)       return false;
     if (specials.has('vegan')   && !m.isVegan)        return false;
     if (specials.has('protein') && !m.isHighProtein)  return false;
@@ -669,58 +959,232 @@ function getPool() {
 }
 
 function updatePoolCount() {
+  // Step 1: ซ่อนจำนวนเมนู — โชว์เฉพาะ fallback ตอนไม่มีเมนูตรงฟิลเตอร์ (ไม่มีตัวเลข)
   const n = getPool().length;
   document.getElementById('poolCount').textContent =
-    n > 0 ? `มีเมนูให้สุ่ม ${n} รายการ` : 'ไม่พบเมนูที่ตรง — จะสุ่มจากทั้งหมดแทน';
+    n > 0 ? '' : 'ไม่มีเมนูตรงเป๊ะ — เดี๋ยวคลายเงื่อนไขรองให้ (คงสัญชาติเดิม)';
 }
 
-// ── Spin ─────────────────────────────────────────────────────────────────────
+// ── Helpers ──────────────────────────────────────────────────────────────────
+// fallback แบบคงสัญชาติไว้เสมอ (แก้บั๊ก: เลือกจีนแล้วได้เมนูไทย)
+function pickFromPool() {
+  let pool = getPool();
+  if (!pool.length)  // คลาย mood + special แต่คงสัญชาติ + งบ
+    pool = menus.filter(m => (filters.cuisine === 'all' || m.cuisine === filters.cuisine) && (filters.budget === 'any' || m.budget === filters.budget));
+  if (!pool.length)  // คลายงบด้วย แต่ยังคงสัญชาติ
+    pool = menus.filter(m => filters.cuisine === 'all' || m.cuisine === filters.cuisine);
+  if (!pool.length) pool = menus;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+function shakeApp() {
+  const app = document.getElementById('app');
+  app.classList.add('shake');
+  setTimeout(() => app.classList.remove('shake'), 500);
+}
+// Step 4: มาสคอตจิ้งจอกเด้งมาแซวตอน reroll รัวๆ (pop-in + shake แล้วหายเอง)
+function popFox() {
+  const pop = document.getElementById('foxPop');
+  document.getElementById('foxSay').textContent =
+    FOX_LINES[Math.floor(Math.random() * FOX_LINES.length)];
+  pop.classList.remove('show'); void pop.offsetWidth; pop.classList.add('show');
+  shakeApp();
+  clearTimeout(popFox._t);
+  popFox._t = setTimeout(() => pop.classList.remove('show'), 1300);
+}
+
+// ── Spin (ปุ่มหลัก: มี loading overlay) ───────────────────────────────────────
 function doSpin() {
   clickCount++;
+  rerollCount = 0;
   document.getElementById('roastBar').textContent =
     ROAST_MSGS[Math.min(clickCount, ROAST_MSGS.length - 1)];
+  if (clickCount >= 5) shakeApp();
 
-  if (clickCount >= 5) {
-    const app = document.getElementById('app');
-    app.classList.add('shake');
-    setTimeout(() => app.classList.remove('shake'), 500);
-  }
+  currentPick = pickFromPool();
 
-  let pool = getPool();
-  if (!pool.length) pool = menus;
-  currentPick = pool[Math.floor(Math.random() * pool.length)];
-
-  // Loading transition → reveal result
   const overlay = document.getElementById('loadingOverlay');
   overlay.classList.add('show');
   clearTimeout(doSpin._timer);
   doSpin._timer = setTimeout(() => {
     overlay.classList.remove('show');
-    revealResult();
+    revealResult(false);
   }, 900);
 }
 
-function revealResult() {
-  document.getElementById('resultMenu').textContent      = currentPick.name;
-  document.getElementById('resultRecommend').textContent = currentPick.recommend ? `แนะนำ: ${currentPick.recommend}` : '';
-  document.getElementById('resultRoast').textContent     = `"${currentPick.roast}"`;
-  document.getElementById('resultCuisine').textContent   = CUISINE_LABEL[currentPick.cuisine] || currentPick.cuisine;
-  document.getElementById('resultBudget').textContent    = BUDGET_LABEL[currentPick.budget];
+// ── Reroll (Step 6: สุ่มในฟิลเตอร์เดิม + อัปเดตการ์ดในที่ ไม่ reload/overlay) ──
+function reroll() {
+  rerollCount++;
+  currentPick = pickFromPool();
+  revealResult(true);
+  if (rerollCount >= 3) popFox();   // กดรัวๆ → จิ้งจอกโผล่มาแซว
+}
 
-  const card = document.getElementById('resultCard');
-  card.classList.add('show');
-  card.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+function revealResult(swap) {
+  // Step 2: ป้าย Gacha Tier
+  const tier = TIER_META[currentPick.tier] || TIER_META.n;
+  document.getElementById('tierBadge').className = 'tier-badge ' + tier.cls;
+  document.getElementById('tierText').textContent = tier.label;
+
+  document.getElementById('resultMenu').textContent = currentPick.name;
+
+  // Step 7: แยกเนื้อสัตว์ / เครื่องเคียง
+  const parts = [];
+  if (currentPick.meat) parts.push('เนื้อ: ' + currentPick.meat);
+  if (currentPick.side) parts.push('เครื่องเคียง: ' + currentPick.side);
+  document.getElementById('resultRecommend').textContent = parts.join('  ·  ');
+
+  document.getElementById('resultRoast').textContent   = `"${currentPick.roast}"`;
+  // สัญชาติ = ธงจริง (จาก chip) + ชื่อ; ตะวันตกไม่มีธง → ใช้ label เดิม
+  const cuisineEl = document.getElementById('resultCuisine');
+  const flagSvg = document.querySelector(`.chip[data-val="${currentPick.cuisine}"] svg.flag`);
+  if (flagSvg) cuisineEl.innerHTML = flagSvg.outerHTML + (CUISINE_NAME[currentPick.cuisine] || currentPick.cuisine);
+  else cuisineEl.textContent = CUISINE_LABEL[currentPick.cuisine] || currentPick.cuisine;
+  document.getElementById('resultBudget').textContent  = BUDGET_LABEL[currentPick.budget];
 
   document.getElementById('btnMap').onclick = () => {
     window.open(`https://www.google.com/maps/search/${encodeURIComponent(currentPick.name)}+ใกล้ฉัน`, '_blank');
   };
+
+  const card = document.getElementById('resultCard');
+  card.classList.add('show');
+  if (swap) {
+    // in-place swap pulse (CSS transition) — ไม่ scroll/reload
+    card.classList.remove('swap'); void card.offsetWidth; card.classList.add('swap');
+  } else {
+    card.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+  }
+}
+
+// ── Enso brush ring (เซน: เริ่มบาง → หนาสุด → เรียวปลายแหลม + มีช่องเปิด + ขอบหยาบ) ──
+// คืน SVG path "d" ของรูป band เปิด ใช้ fill (ไม่ใช่ stroke) — ใช้ได้ทั้ง SVG การ์ด และ canvas (Path2D)
+function ensoPath(cx, cy, R) {
+  const TAU = Math.PI * 2;
+  const gapMid = -Math.PI / 4;        // ช่องเปิดมุมขวาบน (~ -45°)
+  const gapHalf = 0.44;               // ครึ่งความกว้างช่องเปิด
+  const a0 = gapMid + gapHalf;
+  const a1 = gapMid + TAU - gapHalf;
+  const N = 56;
+  const outer = [], inner = [];
+  for (let i = 0; i <= N; i++) {
+    const t = i / N;
+    const a = a0 + (a1 - a0) * t;
+    const taper = Math.pow(Math.sin(Math.PI * t), 0.85);              // 0 ที่ปลายทั้งสอง, 1 ตรงกลาง
+    const heavy = 0.5 + 0.5 * Math.cos(a - (135 * Math.PI / 180));    // หนาสุดฝั่งตรงข้ามช่องเปิด
+    const w = R * (0.035 + 0.205 * taper * (0.35 + 0.65 * heavy));    // ครึ่งความหนา
+    const rough = 1 + 0.022 * Math.sin(a * 11) + 0.018 * Math.sin(a * 5 + 1); // ขอบพู่กันหยาบ
+    const ro = (R + w) * rough, ri = (R - w);
+    outer.push([cx + Math.cos(a) * ro, cy + Math.sin(a) * ro]);
+    inner.push([cx + Math.cos(a) * ri, cy + Math.sin(a) * ri]);
+  }
+  let d = 'M' + outer[0][0].toFixed(2) + ' ' + outer[0][1].toFixed(2);
+  for (let i = 1; i <= N; i++) d += 'L' + outer[i][0].toFixed(2) + ' ' + outer[i][1].toFixed(2);
+  for (let i = N; i >= 0; i--) d += 'L' + inner[i][0].toFixed(2) + ' ' + inner[i][1].toFixed(2);
+  return d + 'Z';
+}
+
+// ── Flag images for receipt (reuse chip flag SVGs; west = dining icon) ──
+const FLAG_IMG = {};
+function preloadFlags() {
+  const svgToImg = (svgStr) => {
+    const img = new Image();
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgStr);
+    return img;
+  };
+  // thai/jp/kr serialize ตรงจาก chip ได้ (self-contained); cn ใช้ <use> จึงต้องสร้างแบบฝังดาวเอง
+  ['thai', 'jp', 'kr'].forEach(c => {
+    const svg = document.querySelector(`.chip[data-val="${c}"] svg.flag`);
+    if (svg) FLAG_IMG[c] = svgToImg(new XMLSerializer().serializeToString(svg));
+  });
+  const star = '0,-1 0.2245,-0.309 0.951,-0.309 0.363,0.118 0.588,0.809 0,0.382 -0.588,0.809 -0.363,0.118 -0.951,-0.309 -0.2245,-0.309';
+  const cnStars = ['translate(3.8 3.5) scale(2.1)','translate(7.2 1.3) scale(0.7)','translate(8.6 2.9) scale(0.7)','translate(8.6 4.9) scale(0.7)','translate(7.2 6.5) scale(0.7)']
+    .map(t => `<polygon points="${star}" fill="#FFDE00" transform="${t}"/>`).join('');
+  FLAG_IMG.cn = svgToImg(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 14"><rect width="21" height="14" fill="#DE2910"/>${cnStars}</svg>`);
+  // ตะวันตกเป็นภูมิภาค ไม่ใช่ประเทศ → ใช้ไอคอนช้อนส้อม (ไม่ใช่ธง)
+  FLAG_IMG.west = svgToImg('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 14"><rect width="21" height="14" rx="2" fill="#F0E6DE"/><g stroke="#C2410C" stroke-width="1.2" stroke-linecap="round"><line x1="7" y1="3" x2="7" y2="11"/><line x1="5.5" y1="3" x2="5.5" y2="5.5"/><line x1="8.5" y1="3" x2="8.5" y2="5.5"/><line x1="14" y1="3.2" x2="14" y2="11"/></g><path d="M12.6 3.2 c2 0 2 3.4 0 3.6 v-3.6 z" fill="#C2410C"/></svg>');
+}
+
+// ── Faint background motif by cuisine (Step 7) ──
+// ภาพประกอบพื้นหลังตามสัญชาติ — silhouette แบบ filled (จางๆ) อิงสถานที่จริง
+function drawCuisineMotif(ctx, cuisine, W, H) {
+  ctx.save();
+  const cx = W / 2, cy = H * 0.47;
+  ctx.translate(cx, cy);
+  const ink = '#A8542B';
+  ctx.fillStyle = ink; ctx.strokeStyle = ink;
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  const fill = (a, fn) => { ctx.globalAlpha = a; ctx.beginPath(); fn(); ctx.fill(); };
+  const line = (a, w, fn) => { ctx.globalAlpha = a; ctx.lineWidth = w; ctx.beginPath(); fn(); ctx.stroke(); };
+
+  if (cuisine === 'jp') {                       // ภูเขาไฟฟูจิ + พระอาทิตย์ + หิมะ
+    fill(0.05, () => ctx.arc(86, -66, 58, 0, Math.PI * 2));
+    fill(0.07, () => {
+      ctx.moveTo(-205, 120);
+      ctx.quadraticCurveTo(-70, 104, -30, -78);
+      ctx.lineTo(-12, -96); ctx.lineTo(12, -96);
+      ctx.quadraticCurveTo(70, 104, 205, 120);
+      ctx.closePath();
+    });
+    line(0.13, 4, () => { ctx.moveTo(-46, -40); ctx.lineTo(-28, -58); ctx.lineTo(-10, -45);
+                          ctx.lineTo(4, -62); ctx.lineTo(20, -48); ctx.lineTo(36, -38); });
+  } else if (cuisine === 'thai') {              // วัดอรุณ — ปรางค์กลาง + ปรางค์ข้าง + แม่น้ำ
+    const prang = (ox, s) => {
+      ctx.save(); ctx.translate(ox, 0); ctx.scale(s, s);
+      fill(0.07, () => {
+        ctx.moveTo(-26, 122);
+        ctx.quadraticCurveTo(-15, 30, -8, -42);
+        ctx.quadraticCurveTo(-4, -90, 0, -158);
+        ctx.quadraticCurveTo(4, -90, 8, -42);
+        ctx.quadraticCurveTo(15, 30, 26, 122);
+        ctx.closePath();
+      });
+      ctx.globalAlpha = 0.11; ctx.lineWidth = 2.2;
+      [-46, -14, 26, 70].forEach(yy => { const ww = 8 + (yy + 46) * 0.16; ctx.beginPath(); ctx.moveTo(-ww, yy); ctx.lineTo(ww, yy); ctx.stroke(); });
+      ctx.restore();
+    };
+    prang(-120, 0.6); prang(120, 0.6);
+    prang(0, 1.0);
+    line(0.08, 3, () => { ctx.moveTo(-210, 134); ctx.lineTo(210, 134); });
+  } else if (cuisine === 'kr') {                // หลังคาพระราชวัง (เชิงชายโค้ง) + เสา
+    fill(0.07, () => {
+      ctx.moveTo(-210, 6);
+      ctx.quadraticCurveTo(-222, -16, -242, -22);
+      ctx.quadraticCurveTo(-150, -42, 0, -84);
+      ctx.quadraticCurveTo(150, -42, 242, -22);
+      ctx.quadraticCurveTo(222, -16, 210, 6);
+      ctx.quadraticCurveTo(0, -46, -210, 6);
+      ctx.closePath();
+    });
+    line(0.10, 5, () => { for (const dx of [-150, -72, 72, 150]) { ctx.moveTo(dx, 14); ctx.lineTo(dx, 128); } });
+    line(0.08, 4, () => { ctx.moveTo(-190, 130); ctx.lineTo(190, 130); });
+  } else if (cuisine === 'cn') {                // โคมไฟจีน
+    fill(0.07, () => ctx.ellipse(0, 0, 92, 120, 0, 0, Math.PI * 2));
+    fill(0.11, () => ctx.rect(-46, -140, 92, 18));
+    fill(0.11, () => ctx.rect(-46, 122, 92, 18));
+    line(0.08, 2.5, () => { for (const dx of [-50, 0, 50]) { ctx.moveTo(dx, -116); ctx.quadraticCurveTo(dx * 1.18, 0, dx, 116); } });
+    line(0.09, 4, () => { ctx.moveTo(0, 140); ctx.lineTo(0, 186); });
+  } else {                                      // ตะวันตก — หอไอเฟล
+    fill(0.06, () => {
+      ctx.moveTo(-92, 150);
+      ctx.quadraticCurveTo(-36, 108, -18, 20);
+      ctx.lineTo(-8, -152); ctx.lineTo(8, -152); ctx.lineTo(18, 20);
+      ctx.quadraticCurveTo(36, 108, 92, 150);
+      ctx.lineTo(48, 150);
+      ctx.quadraticCurveTo(22, 64, 10, 20); ctx.lineTo(-10, 20);
+      ctx.quadraticCurveTo(-22, 64, -48, 150);
+      ctx.closePath();
+    });
+    line(0.10, 4, () => { ctx.moveTo(-66, 92); ctx.quadraticCurveTo(0, 46, 66, 92); });
+    line(0.09, 3, () => { ctx.moveTo(-30, -34); ctx.lineTo(30, -34); ctx.moveTo(-17, -94); ctx.lineTo(17, -94); });
+    line(0.08, 2.5, () => { ctx.moveTo(0, -152); ctx.lineTo(0, -178); });
+  }
+  ctx.restore();
 }
 
 // ── Canvas Receipt ────────────────────────────────────────────────────────────
 function drawReceipt(pick) {
   const canvas = document.getElementById('receiptCanvas');
   const ctx    = canvas.getContext('2d');
-  const W = 600, H = 1040;
+  const W = 600, H = 1100;
   canvas.width  = W;
   canvas.height = H;
 
@@ -787,19 +1251,8 @@ function drawReceipt(pick) {
   ctx.fillText(`${dateStr}  ${timeStr}`, W / 2, 120);
   ctx.fillText(orderId, W / 2, 142);
 
-  // ── Faint "🦊 APPROVED" stamp watermark ──
-  ctx.save();
-  ctx.globalAlpha = 0.07;
-  ctx.translate(W / 2, H * 0.52);
-  ctx.rotate(-0.30);
-  ctx.strokeStyle = ORANGE_DARK;
-  ctx.fillStyle   = ORANGE_DARK;
-  ctx.lineWidth = 5;  ctx.beginPath(); ctx.roundRect(-168, -72, 336, 144, 18); ctx.stroke();
-  ctx.lineWidth = 2;  ctx.beginPath(); ctx.roundRect(-156, -60, 312, 120, 12); ctx.stroke();
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.font = '30px sans-serif';        ctx.fillText('🦊', 0, -28);
-  ctx.font = f(600, 48);               ctx.fillText('APPROVED', 0, 22);
-  ctx.restore();
+  // ── Faint background motif by cuisine (Step 7) ──
+  drawCuisineMotif(ctx, pick.cuisine, W, H);
 
   // dashed separator helper
   function dash(y) {
@@ -830,15 +1283,16 @@ function drawReceipt(pick) {
   menuLines.forEach((l, i) => ctx.fillText(l, W / 2, y + i * 54));
   y += (menuLines.length - 1) * 54 + 38;
 
-  // recommend
-  if (pick.recommend) {
-    ctx.font = f(400, 15); ctx.fillStyle = ORANGE;
-    ctx.fillText(`แนะนำ: ${pick.recommend}`, W / 2, y);
-  }
-  y += 30;
+  // meat / side (แยกฟิลด์ — Step 7)
+  ctx.fillStyle = ORANGE; ctx.font = f(400, 14); ctx.textAlign = 'center';
+  const recLines = [];
+  if (pick.meat) recLines.push('เนื้อสัตว์: ' + pick.meat);
+  if (pick.side) recLines.push('เครื่องเคียง: ' + pick.side);
+  recLines.forEach((l, i) => ctx.fillText(l, W / 2, y + i * 22));
+  y += (recLines.length ? (recLines.length - 1) * 22 + 30 : 30);
 
-  // ── Cheeky status row ──
-  const stats = [['ความอร่อย', '100%'], ['แคลอรี', 'โคตรเยอะ'], ['ความประหยัด', 'แล้วแต่ดวง']];
+  // ── Cheeky status row (dry tone) ──
+  const stats = [['ความอร่อย', 'โอเคเลย'], ['แคลอรี', 'ไม่นับ'], ['ดวงวันนี้', 'พอใช้ได้']];
   const pillX = 40, pillW = W - 80, pillH = 58;
   ctx.fillStyle = LIGHT;
   ctx.beginPath(); ctx.roundRect(pillX, y, pillW, pillH, 16); ctx.fill();
@@ -853,21 +1307,35 @@ function drawReceipt(pick) {
     ctx.fillStyle = GRAY;        ctx.font = f(400, 11); ctx.fillText(s[0], cx, y + 23);
     ctx.fillStyle = ORANGE_DARK; ctx.font = f(600, 15); ctx.fillText(s[1], cx, y + 45);
   });
-  y += pillH + 30;
+  y += pillH + 26;
+
+  // สถิติทิพย์ (gamification — ตั้งใจมั่วเพื่อความบันเทิง)
+  ctx.textAlign = 'center'; ctx.fillStyle = GRAY; ctx.font = f(400, 12);
+  ctx.fillText(FAKE_LINES[Math.floor(Math.random() * FAKE_LINES.length)], W / 2, y);
+  y += 28;
 
   dash(y); y += 32;
 
-  // meta rows
+  // meta rows (สัญชาติ = ธงจริง + ชื่อ — Step 6)
   const rows = [
-    ['สัญชาติอาหาร', CUISINE_LABEL[pick.cuisine] || pick.cuisine],
+    ['สัญชาติอาหาร', CUISINE_NAME[pick.cuisine] || pick.cuisine],
     ['งบประมาณ',     BUDGET_LABEL[pick.budget]],
     ['เวลาสุ่ม',     timeStr],
   ];
   ctx.font = f(400, 15);
+  const flagImg = FLAG_IMG[pick.cuisine];
   rows.forEach((row, i) => {
     const ry = y + i * 38;
     ctx.textAlign = 'left';  ctx.fillStyle = GRAY;  ctx.fillText(row[0], 46, ry);
-    ctx.textAlign = 'right'; ctx.fillStyle = BLACK; ctx.fillText(row[1], W - 46, ry);
+    if (i === 0 && flagImg && flagImg.complete && flagImg.naturalWidth) {
+      const fw = 27, fh = 18;
+      ctx.drawImage(flagImg, W - 46 - fw, ry - 14, fw, fh);
+      ctx.strokeStyle = 'rgba(0,0,0,0.12)'; ctx.lineWidth = 1;
+      ctx.strokeRect(W - 46 - fw, ry - 14, fw, fh);
+      ctx.textAlign = 'right'; ctx.fillStyle = BLACK; ctx.fillText(row[1], W - 46 - fw - 8, ry);
+    } else {
+      ctx.textAlign = 'right'; ctx.fillStyle = BLACK; ctx.fillText(row[1], W - 46, ry);
+    }
   });
   y += rows.length * 38 + 8;
 
@@ -908,6 +1376,29 @@ function drawReceipt(pick) {
   ctx.fillStyle = ORANGE; ctx.font = '22px sans-serif';
   ctx.fillText('★ ★ ★', W / 2, y);
 
+  // ── Gacha Tier seal (Enso เซน filled + ตัวอักษร gradient/glow — Step 5/7) ──
+  (function () {
+    const t = TIER_META[pick.tier] || TIER_META.n;
+    ctx.save();
+    ctx.translate(W - 94, headerH + 56);
+    ctx.rotate(-0.12);
+    // วง enso filled (เริ่มบาง→หนา→เรียวปลาย + ช่องเปิด) สีตาม tier
+    ctx.globalAlpha = 0.92;
+    ctx.fillStyle = t.stroke;
+    ctx.fill(new Path2D(ensoPath(0, 0, 38)));
+    // label tier — gradient + glow
+    const grad = ctx.createLinearGradient(0, -13, 0, 13);
+    t.g.forEach((c, idx) => grad.addColorStop(t.g.length === 1 ? 0 : idx / (t.g.length - 1), c));
+    ctx.globalAlpha = 1;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = f(700, t.label.length > 2 ? 22 : 27);
+    ctx.shadowColor = t.stroke; ctx.shadowBlur = 9;
+    ctx.fillStyle = grad;
+    ctx.fillText(t.label, 0, 1);
+    ctx.shadowBlur = 0;
+    ctx.restore();
+  })();
+
   ctx.restore(); // end paper clip
 }
 
@@ -918,6 +1409,7 @@ document.querySelectorAll('.chip[data-group]').forEach(c => {
     c.classList.add('active');
     filters[c.dataset.group] = c.dataset.val;
     clickCount = 0;
+    rerollCount = 0;
     document.getElementById('roastBar').textContent = '';
     updatePoolCount();
   });
@@ -925,22 +1417,12 @@ document.querySelectorAll('.chip[data-group]').forEach(c => {
 
 document.querySelectorAll('.mood-chip').forEach(c => {
   c.addEventListener('click', () => {
-    const val  = c.dataset.val;
-    const anyC = document.querySelector('.mood-chip[data-val="any"]');
-    if (val === 'any') {
-      selectedMoods.clear();
-      document.querySelectorAll('.mood-chip').forEach(x => x.classList.remove('active'));
-      c.classList.add('active');
-    } else {
-      anyC.classList.remove('active');
-      if (c.classList.contains('active')) {
-        c.classList.remove('active'); selectedMoods.delete(val);
-        if (!selectedMoods.size) anyC.classList.add('active');
-      } else {
-        c.classList.add('active'); selectedMoods.add(val);
-      }
-    }
+    // single-select: เลือกได้ทีละอย่าง (ลด combo ที่เป็นไปไม่ได้จริง)
+    document.querySelectorAll('.mood-chip').forEach(x => x.classList.remove('active'));
+    c.classList.add('active');
+    selectedMood = (c.dataset.val === 'any') ? null : c.dataset.val;
     clickCount = 0;
+    rerollCount = 0;
     document.getElementById('roastBar').textContent = '';
     updatePoolCount();
   });
@@ -951,12 +1433,13 @@ document.querySelectorAll('.special-chip').forEach(c => {
     c.classList.toggle('active');
     if (c.classList.contains('active')) specials.add(c.dataset.val);
     else specials.delete(c.dataset.val);
+    rerollCount = 0;
     updatePoolCount();
   });
 });
 
-document.getElementById('btnRandom').addEventListener('click', doSpin);
-document.getElementById('btnRespin').addEventListener('click', doSpin);
+document.getElementById('btnRandom').addEventListener('click', doSpin);     // ปุ่มหลัก: สุ่มใหม่เต็ม (มี loading)
+document.getElementById('btnRespin').addEventListener('click', reroll);     // Step 6: สุ่มซ้ำในฟิลเตอร์เดิม (อัปเดตในที่)
 
 document.getElementById('btnShare').addEventListener('click', () => {
   if (!currentPick) return;
@@ -987,6 +1470,8 @@ document.getElementById('btnDownload').addEventListener('click', () => {
 // ── Init ──────────────────────────────────────────────────────────────────────
 initStreak();
 updatePoolCount();
+preloadFlags();
+document.getElementById('ensoCardPath').setAttribute('d', ensoPath(35, 35, 25));   // วง enso การ์ดผล
 </script>
 </body>
 </html>
