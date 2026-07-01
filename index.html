@@ -327,11 +327,23 @@
 
     /* ── Footer ── */
     .footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
       text-align: center;
       padding: 2rem 1rem 0.5rem;
       font-size: 11px;
       color: var(--text-muted);
     }
+    .footer-fox {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      flex-shrink: 0;
+      filter: drop-shadow(0 3px 5px rgba(244,81,30,0.2));
+    }
+    .footer-fox.right { transform: scaleX(-1); }
     .footer-credit {
       text-align: center;
       padding: 4px 1rem 1.5rem;
@@ -583,6 +595,9 @@
     <radialGradient id="gradFried" cx="34%" cy="28%" r="78%">
       <stop offset="0" stop-color="#FFD873"/><stop offset="1" stop-color="#E0891A"/>
     </radialGradient>
+    <radialGradient id="gradLight" cx="34%" cy="28%" r="78%">
+      <stop offset="0" stop-color="#FFF3D6"/><stop offset="1" stop-color="#C9A063"/>
+    </radialGradient>
     <radialGradient id="gradAny" cx="34%" cy="28%" r="78%">
       <stop offset="0" stop-color="#C9A2FF"/><stop offset="1" stop-color="#6C3FD1"/>
     </radialGradient>
@@ -631,8 +646,9 @@
       <div class="chip-row">
         <div class="chip mood-chip" data-val="spicy"><svg class="sticker" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="url(#gradSpicy)"/><ellipse cx="8.4" cy="7.6" rx="5.6" ry="3.4" fill="#fff" opacity="0.3" transform="rotate(-20 8.4 7.6)"/><circle cx="12" cy="12" r="11" fill="none" stroke="#fff" stroke-width="1.4" opacity="0.85"/><path d="M12.3 4.6 C15.2 7.4 16.9 10 16.5 12.9 C16.1 16 13.5 18.2 10.8 17.9 C8 17.6 6.1 15.1 6.6 12.3 C6.9 10.7 7.9 9.5 8.6 8.2 C8.4 9.5 9 10.3 9.8 10.1 C10.7 9.9 10.6 8.6 10 7.7 C9.2 6.3 9.6 5.4 12.3 4.6 Z" fill="#fff"/></svg>แซ่บๆ</div>
         <div class="chip mood-chip" data-val="soup"><svg class="sticker" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="url(#gradSoup)"/><ellipse cx="8.4" cy="7.6" rx="5.6" ry="3.4" fill="#fff" opacity="0.3" transform="rotate(-20 8.4 7.6)"/><circle cx="12" cy="12" r="11" fill="none" stroke="#fff" stroke-width="1.4" opacity="0.85"/><path d="M9.8 8.2 q1.3 -1.8 0 -3.6" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none"/><path d="M13 7.4 q1.3 -1.8 0 -3.6" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none"/><path d="M5.6 12.8 a6.4 4.8 0 0 0 12.8 0 Z" fill="#fff"/><rect x="5.3" y="11.8" width="13.4" height="1.8" rx="0.9" fill="#fff"/></svg>สายซด</div>
-        <div class="chip mood-chip" data-val="full"><svg class="sticker" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="url(#gradFull)"/><ellipse cx="8.4" cy="7.6" rx="5.6" ry="3.4" fill="#fff" opacity="0.3" transform="rotate(-20 8.4 7.6)"/><circle cx="12" cy="12" r="11" fill="none" stroke="#fff" stroke-width="1.4" opacity="0.85"/><path d="M5.6 12.8 a6.4 4.8 0 0 0 12.8 0 Z" fill="#fff"/><rect x="5.3" y="11.8" width="13.4" height="1.8" rx="0.9" fill="#fff"/><ellipse cx="12" cy="9.6" rx="4.8" ry="3" fill="#fff"/></svg>เน้นอิ่ม</div>
         <div class="chip mood-chip" data-val="fried"><svg class="sticker" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="url(#gradFried)"/><ellipse cx="8.4" cy="7.6" rx="5.6" ry="3.4" fill="#fff" opacity="0.3" transform="rotate(-20 8.4 7.6)"/><circle cx="12" cy="12" r="11" fill="none" stroke="#fff" stroke-width="1.4" opacity="0.85"/><line x1="9.6" y1="11" x2="9" y2="5.8" stroke="#fff" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="11" x2="12" y2="4.8" stroke="#fff" stroke-width="2" stroke-linecap="round"/><line x1="14.4" y1="11" x2="15" y2="5.8" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M8 11 L16 11 L15.1 19 a1.6 1.6 0 0 1 -1.6 1.4 h-3 a1.6 1.6 0 0 1 -1.6 -1.4 Z" fill="#fff"/></svg>ของทอด</div>
+        <div class="chip mood-chip" data-val="full"><svg class="sticker" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="url(#gradFull)"/><ellipse cx="8.4" cy="7.6" rx="5.6" ry="3.4" fill="#fff" opacity="0.3" transform="rotate(-20 8.4 7.6)"/><circle cx="12" cy="12" r="11" fill="none" stroke="#fff" stroke-width="1.4" opacity="0.85"/><path d="M5.6 12.8 a6.4 4.8 0 0 0 12.8 0 Z" fill="#fff"/><rect x="5.3" y="11.8" width="13.4" height="1.8" rx="0.9" fill="#fff"/><ellipse cx="12" cy="9.6" rx="4.8" ry="3" fill="#fff"/></svg>เน้นอิ่ม</div>
+        <div class="chip mood-chip" data-val="light"><svg class="sticker" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="url(#gradLight)"/><ellipse cx="8.4" cy="7.6" rx="5.6" ry="3.4" fill="#fff" opacity="0.3" transform="rotate(-20 8.4 7.6)"/><circle cx="12" cy="12" r="11" fill="none" stroke="#fff" stroke-width="1.4" opacity="0.85"/><path d="M5.6 13.6 a6.4 4.4 0 0 0 12.8 0 Z" fill="#fff"/><rect x="5.3" y="12.7" width="13.4" height="1.6" rx="0.8" fill="#fff"/><ellipse cx="15.6" cy="7.4" rx="1.8" ry="2.4" fill="#fff" transform="rotate(25 15.6 7.4)"/><rect x="13.6" y="8.6" width="1.3" height="5.6" rx="0.6" fill="#fff" transform="rotate(25 13.6 8.6)"/></svg>เบาท้อง</div>
         <div class="chip mood-chip active" data-val="any"><svg class="sticker" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="url(#gradAny)"/><ellipse cx="8.4" cy="7.6" rx="5.6" ry="3.4" fill="#fff" opacity="0.3" transform="rotate(-20 8.4 7.6)"/><circle cx="12" cy="12" r="11" fill="none" stroke="#fff" stroke-width="1.4" opacity="0.85"/><text x="12" y="16.8" text-anchor="middle" font-family="Kanit, sans-serif" font-weight="700" font-size="13.5" fill="#fff">?</text></svg>อะไรก็ได้</div>
       </div>
     </div>
@@ -644,8 +660,8 @@
       <div class="special-row">
         <div class="special-chip" data-val="halal"><svg class="sticker" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="url(#gradHalal)"/><ellipse cx="8.4" cy="7.6" rx="5.6" ry="3.4" fill="#fff" opacity="0.3" transform="rotate(-20 8.4 7.6)"/><circle cx="12" cy="12" r="11" fill="none" stroke="#fff" stroke-width="1.4" opacity="0.85"/><path d="M15.3 7.2 a5.2 5.2 0 1 0 0 9.6 a4 4 0 1 1 0 -9.6 z" fill="#fff"/><path d="M17.6 10.9 l0.55 1.4 1.5 0.08 -1.16 0.95 0.4 1.45 -1.29 -0.78 -1.29 0.78 0.4 -1.45 -1.16 -0.95 1.5 -0.08 z" fill="#fff"/></svg>ฮาลาล</div>
         <div class="special-chip" data-val="vegan"><svg class="sticker" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="url(#gradVegan)"/><ellipse cx="8.4" cy="7.6" rx="5.6" ry="3.4" fill="#fff" opacity="0.3" transform="rotate(-20 8.4 7.6)"/><circle cx="12" cy="12" r="11" fill="none" stroke="#fff" stroke-width="1.4" opacity="0.85"/><path d="M12 18.5 V11" stroke="#1F6B12" stroke-width="1.8" stroke-linecap="round"/><path d="M12 12.3 C12 8 9 6.2 6 6.5 C5.9 10.2 8.8 12.3 12 12.3 Z" fill="#fff"/><path d="M12 11.2 C12 7.2 15.3 5.5 18.2 5.9 C18.3 9.5 15.3 11.2 12 11.2 Z" fill="#EFFFE0"/></svg>วีแกน</div>
-        <div class="special-chip" data-val="protein"><svg class="sticker" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="url(#gradProtein)"/><ellipse cx="8.4" cy="7.6" rx="5.6" ry="3.4" fill="#fff" opacity="0.3" transform="rotate(-20 8.4 7.6)"/><circle cx="12" cy="12" r="11" fill="none" stroke="#fff" stroke-width="1.4" opacity="0.85"/><g fill="#fff"><rect x="4.8" y="9.4" width="2.3" height="5.2" rx="0.9"/><rect x="6.9" y="10.6" width="1.7" height="2.8" rx="0.6"/><rect x="8.3" y="11.1" width="7.4" height="1.8" rx="0.7"/><rect x="15.4" y="10.6" width="1.7" height="2.8" rx="0.6"/><rect x="16.9" y="9.4" width="2.3" height="5.2" rx="0.9"/></g></svg>High Protein</div>
         <div class="special-chip" data-val="nomeat"><svg class="sticker" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="url(#gradNomeat)"/><ellipse cx="8.4" cy="7.6" rx="5.6" ry="3.4" fill="#fff" opacity="0.3" transform="rotate(-20 8.4 7.6)"/><circle cx="12" cy="12" r="11" fill="none" stroke="#fff" stroke-width="1.4" opacity="0.85"/><g fill="#fff"><path d="M6.6 8.6 q-2 -0.9 -2.4 1 q1.1 0.5 2.4 0.2 z"/><path d="M17.4 8.6 q2 -0.9 2.4 1 q-1.1 0.5 -2.4 0.2 z"/><ellipse cx="12" cy="12.4" rx="4.6" ry="4.2"/></g><ellipse cx="12" cy="13.9" rx="3" ry="2.1" fill="url(#gradNomeat)"/><circle cx="10.5" cy="13.7" r="0.55" fill="#fff"/><circle cx="13.5" cy="13.7" r="0.55" fill="#fff"/><circle cx="10.2" cy="10.9" r="0.7" fill="url(#gradNomeat)"/><circle cx="13.8" cy="10.9" r="0.7" fill="url(#gradNomeat)"/><line x1="5.4" y1="5.4" x2="18.6" y2="18.6" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><line x1="5.4" y1="5.4" x2="18.6" y2="18.6" stroke="#9C241A" stroke-width="0.9" stroke-linecap="round"/></svg>ไม่กินเนื้อวัว</div>
+        <div class="special-chip" data-val="protein"><svg class="sticker" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="url(#gradProtein)"/><ellipse cx="8.4" cy="7.6" rx="5.6" ry="3.4" fill="#fff" opacity="0.3" transform="rotate(-20 8.4 7.6)"/><circle cx="12" cy="12" r="11" fill="none" stroke="#fff" stroke-width="1.4" opacity="0.85"/><g fill="#fff"><rect x="4.8" y="9.4" width="2.3" height="5.2" rx="0.9"/><rect x="6.9" y="10.6" width="1.7" height="2.8" rx="0.6"/><rect x="8.3" y="11.1" width="7.4" height="1.8" rx="0.7"/><rect x="15.4" y="10.6" width="1.7" height="2.8" rx="0.6"/><rect x="16.9" y="9.4" width="2.3" height="5.2" rx="0.9"/></g></svg>High Protein</div>
       </div>
       <div class="special-note">☪️ ฮาลาล: ตามข้อมูลที่เรามี ไม่ใช่การรับรองทางการ — โปรดตรวจสอบที่ร้านอีกครั้ง</div>
     </div>
@@ -681,7 +697,7 @@
     <button class="btn-respin" id="btnRespin">🔄 ไม่เอาอะ... ขอสุ่มใหม่ (ฟิลเตอร์เดิม)</button>
   </div>
 
-  <div class="footer">วันนี้กินอะไรดี? · คลังแสงอาหาร พร้อมรบ</div>
+  <div class="footer"><img class="footer-fox" id="footerFoxImgL" alt="" aria-hidden="true">วันนี้กินอะไรดี? · คลังแสงอาหาร พร้อมรบ<img class="footer-fox right" id="footerFoxImgR" alt="" aria-hidden="true"></div>
   <div class="footer-credit">Created by Petchsinu</div>
 </div>
 
@@ -728,7 +744,7 @@ const menus = [
   {name:"ก๋วยจั๊บน้ำข้น",meat:"หมูกรอบ / เครื่องใน",side:"ไข่ต้ม",cuisine:"thai",budget:"low",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"r",roast:"น้ำซุปพริกไทยฉุนๆ เหมาะกับคนอยากร้องไห้แบบมีข้ออ้าง"},
   {name:"ส้มตำไก่ย่าง",meat:"ไก่ย่าง",side:"ข้าวเหนียว",cuisine:"thai",budget:"low",mood:["spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"แซ่บจนลืมไปชั่วขณะว่าพรุ่งนี้ยังต้องตื่นไปทำงาน"},
   {name:"ข้าวไข่เจียวทรงเครื่อง",meat:"หมูสับ / กุ้งสับ",side:"ข้าวสวย / น้ำพริก",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"งบเหลือน้อยแต่ศักดิ์ศรียังเต็ม ไข่เจียวเข้าใจคุณดี"},
-  {name:"โจ๊กหมูสับ",meat:"หมูสับ / ไข่เยี่ยวม้า",side:"ปาท่องโก๋",cuisine:"thai",budget:"low",mood:["soup"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"ไม่ได้ป่วย แต่ก็ไม่ได้อยากเคี้ยวอะไรเหมือนกัน รับทราบ"},
+  {name:"โจ๊กหมูสับ",meat:"หมูสับ / ไข่เยี่ยวม้า / ไข่ลวก",side:"ปาท่องโก๋",cuisine:"thai",budget:"low",mood:["soup","light"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"ไม่ได้ป่วย แต่ก็ไม่ได้อยากเคี้ยวอะไรเหมือนกัน รับทราบ"},
   {name:"ข้าวต้มกุ๊ย",meat:"ปลา / หมู / กุ้ง",side:"ผักกาดดอง / ไข่เค็ม",cuisine:"thai",budget:"low",mood:["soup","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"กินคลีนหนึ่งมื้อ ทดแทนของทอดทั้งสัปดาห์ คณิตศาสตร์ที่ไม่ลงตัว"},
   {name:"ผัดไทยกุ้งสด",meat:"กุ้งสด / ไก่ / เต้าหู้",side:"ถั่วงอก / ใบกุยช่าย",cuisine:"thai",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"r",roast:"นักท่องเที่ยวสั่งเพราะเห็นในรูป คุณสั่งเพราะหิว ต่างกันแค่นั้น"},
   {name:"ราดหน้าหมูหมัก",meat:"หมูหมัก / ทะเล / เต้าหู้",side:"คะน้า",cuisine:"thai",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"น้ำราดข้นๆ ที่พิสูจน์ว่าผักก็พอกินได้ ถ้าจมอยู่ในแป้ง"},
@@ -755,7 +771,7 @@ const menus = [
   // ── THAI · งบเยอะมาก ──
   {name:"บุฟเฟต์ซีฟู้ดพรีเมียม",meat:"ล็อบสเตอร์ / ปูอลาสก้า / หอยเชลล์",side:"น้ำจิ้มซีฟู้ด",cuisine:"thai",budget:"high",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"กินให้คุ้มค่าตัว ไม่งั้นมันจะกลายเป็นค่าเทอมที่เปล่าประโยชน์"},
   {name:"ปูไข่ดองเจ้าดัง",meat:"ปูดองซีอิ๊ว / กุ้งดอง",side:"ข้าวสวยร้อน",cuisine:"thai",budget:"high",mood:["spicy"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"ข้าวจานเดียวหายไปสามจาน นี่แหละราคาของความอร่อย"},
-  {name:"Fine Seafood",meat:"ล็อบสเตอร์เผา / ปูม้านึ่ง",side:"น้ำจิ้มซีฟู้ด",cuisine:"thai",budget:"high",mood:["full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"ทะเลสดราคาสูง แต่รูปที่ได้ลงสตอรี่ก็พอถือว่าคุ้ม"},
+  {name:"ซีฟู้ดจัดเต็ม",meat:"ล็อบสเตอร์เผา / ปูม้านึ่ง",side:"น้ำจิ้มซีฟู้ด",cuisine:"thai",budget:"high",mood:["full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"ทะเลสดราคาสูง แต่รูปที่ได้ลงสตอรี่ก็พอถือว่าคุ้ม"},
   // ── THAI · เหนือ ──
   {name:"ขนมจีนน้ำเงี้ยว",meat:"ซี่โครงหมู / เลือดหมู",side:"ผักกาดดอง / แคบหมู",cuisine:"thai",budget:"low",mood:["soup","spicy"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"r",roast:"เส้นขนมจีนราดน้ำเงี้ยว เผ็ดอุ่นแบบคนเหนือที่ไม่พูดเยอะ"},
   {name:"แกงฮังเล",meat:"หมูสามชั้น / ขิง",side:"ข้าวเหนียว",cuisine:"thai",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"r",roast:"หวานเค็มมันแบบเหนือแท้ กินกับข้าวเหนียวแล้วเงียบไปเลย"},
@@ -793,7 +809,7 @@ const menus = [
   {name:"ก๋วยเตี๋ยวต้มยำหมูสับ",meat:"หมูสับ / ลูกชิ้น",side:"ถั่วลิสง / ผัก",cuisine:"thai",budget:"low",mood:["soup","spicy"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"ต้มยำน้ำข้นใส่ทุกอย่าง เปรี้ยวเผ็ดหวานครบในชามเดียว"},
   {name:"แกงเทโพหมูสามชั้น",meat:"หมูสามชั้น / ผักบุ้ง",side:"ข้าวสวย",cuisine:"thai",budget:"mid",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"r",roast:"เปรี้ยวหวานเผ็ดกลมกล่อม เมนูที่ผักบุ้งได้ฉายแสง"},
   {name:"ปลาทูทอดน้ำปลาหวาน",meat:"ปลาทู",side:"ข้าวสวย / ผักสด",cuisine:"thai",budget:"low",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"ปลาทูทอดกับน้ำปลาหวาน ความอร่อยที่ไม่ต้องพยายาม"},
-  {name:"ข้าวต้มปลากะพง",meat:"ปลากะพง",side:"ขิงซอย / กระเทียมเจียว",cuisine:"thai",budget:"mid",mood:["soup","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"r",roast:"ข้าวต้มปลาร้อนๆ เบาท้องแต่ไม่เบารสชาติ"},
+  {name:"ข้าวต้มปลากะพง",meat:"ปลากะพง",side:"ขิงซอย / กระเทียมเจียว",cuisine:"thai",budget:"mid",mood:["soup","full","light"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"r",roast:"ข้าวต้มปลาร้อนๆ เบาท้องแต่ไม่เบารสชาติ"},
   {name:"ขนมจีนน้ำยาปู",meat:"ปูแกะ / กุ้ง",side:"ผักเหนาะ / ไข่ต้ม",cuisine:"thai",budget:"mid",mood:["spicy","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"sr",roast:"น้ำยาปูเข้มข้น เวอร์ชันที่จ่ายแพงขึ้นเพื่อความหรู"},
   // ── JAPANESE · งบปกติ ──
   {name:"ยากิโซบะ",meat:"หมู / ซีฟู้ด / ผัก",side:"ขิงดอง / โนริ",cuisine:"jp",budget:"low",mood:["fried","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"r",roast:"เส้นผัดซอสเข้ม กินทั้งจานแล้วยังรู้สึกว่ายังไม่พอ"},
@@ -911,6 +927,23 @@ const menus = [
   {name:"ลาซานญ่า",meat:"เนื้อบด / ชีสหลายชั้น",side:"สลัด",cuisine:"west",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:false,tier:"r",roast:"ชีสยืดทุกคำ เนื้อบดซ้อนแป้ง มื้อหนักที่หนักท้องสมชื่อ"},
   {name:"สปาเกตตี้คาร์โบนาร่า",meat:"เบคอน / ไข่แดง",side:"พาร์เมซาน",cuisine:"west",budget:"mid",mood:["full"],isHalal:false,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"r",roast:"ครีมไข่เคลือบเส้นมันวาว เมนูฮิตที่สั่งผิดไม่เป็นไง มันอร่อยอยู่ดี"},
   {name:"ปีกไก่ทอดซอส",meat:"ปีกไก่ทอด",side:"ซอสบัฟฟาโล / เซเลอรี่",cuisine:"west",budget:"low",mood:["fried","full"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"ปีกไก่ราดซอสเผ็ดเปรี้ยว มือเลอะได้แต่ใจไม่แคร์"},
+  // ── รอบ 6: หมวดใหม่ "เบาท้อง" (light/comfort food) ──
+  {name:"ข้าวต้ม",meat:"หมู / ไก่ / ปลา / กุ้ง",side:"ขิงซอย / ต้นหอม",cuisine:"thai",budget:"low",mood:["light","soup"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"มื้อนี้ไม่มีดราม่า มีแค่ข้าวต้มร้อนๆ กับความสงบที่หายากในชีวิต"},
+  {name:"โจ๊กเป๋าฮื้อ",meat:"เป๋าฮื้อ / เห็ดหอม",side:"ปาท่องโก๋ / ขิงซอย",cuisine:"cn",budget:"high",mood:["light","soup"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"โจ๊กชามเดียวราคาเท่าค่าข้าวสามมื้อ แต่ความหรูมันบอกไม่ได้ว่าไม่คุ้ม"},
+  {name:"โจ๊กหูฉลาม",meat:"หูฉลาม",side:"น้ำส้มสายชูดำ / พริกไทย",cuisine:"cn",budget:"high",mood:["light","soup"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"ชามเล็กราคาใหญ่ กินไปก็ได้แต่บอกตัวเองว่าปีนี้พิเศษจริงๆ"},
+  {name:"ข้าวต้มเครื่องจีน",meat:"ปีกไก่ตุ๋น / เห็ดหอม",side:"ขิงซอย / ผักกาดดอง",cuisine:"cn",budget:"mid",mood:["light","soup"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"r",roast:"ปีกไก่ตุ๋นนุ่มจนไม่ต้องเคี้ยว เหมือนชีวิตที่บางวันก็อยากให้ทุกอย่างง่ายแบบนี้"},
+  {name:"โอคายุ",meat:"ข้าวต้มญี่ปุ่น",side:"ไข่ออนเซ็น / สาหร่ายโนริ / อูเมะโบชิ",cuisine:"jp",budget:"low",mood:["light","soup"],isHalal:true,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"ข้าวต้มญี่ปุ่นถ้วยน้อย ดูไม่อิ่มแต่กระเพาะกลับรู้สึกขอบคุณ"},
+  {name:"โอคายุหน้าปลาไหลย่าง",meat:"ปลาไหลย่าง",side:"ขิงดอง / สาหร่าย",cuisine:"jp",budget:"high",mood:["light","soup"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"ปลาไหลย่างวางบนข้าวต้ม ความหรูที่แอบซ่อนในชามที่ดูธรรมดา"},
+  {name:"ซุปมิโสะใส่เต้าหู้อ่อน",meat:"เต้าหู้อ่อน / สาหร่ายวากาเมะ",side:"ต้นหอม",cuisine:"jp",budget:"low",mood:["light","soup"],isHalal:true,isVegan:true,isHighProtein:false,isNoMeat:true,tier:"n",roast:"ซุปถ้วยเล็กที่ไม่มีใครสั่งเป็นมื้อหลัก แต่ขาดไปเมื่อไหร่ก็รู้สึกแปลกๆ"},
+  {name:"ฮวานอกจุก",meat:"ไก่ฉีก",side:"ขิงซอย / ต้นหอม",cuisine:"kr",budget:"low",mood:["light","soup"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"n",roast:"ข้าวต้มไก่ฉีกเกาหลี กินตอนไม่สบายก็ได้ กินตอนสบายดีก็ยังอร่อย"},
+  {name:"จอนบกจุก",meat:"เป๋าฮื้อเชจู",side:"น้ำมันงา / ต้นหอม",cuisine:"kr",budget:"high",mood:["light","soup"],isHalal:true,isVegan:false,isHighProtein:true,isNoMeat:true,tier:"ssr",roast:"ข้าวต้มสีเขียวราคาแรง เป๋าฮื้อเชจูที่ทำให้มื้อเบาๆ กลายเป็นมื้อพิเศษ"},
+  {name:"ซุปสาหร่ายมิยอกกุก",meat:"สาหร่ายทะเล / เนื้อวัว",side:"ข้าวสวย",cuisine:"kr",budget:"low",mood:["light","soup"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:false,tier:"n",roast:"ซุปสาหร่ายวันเกิดที่กินเมื่อไหร่ก็ได้ ไม่ต้องรอวันเกิดจริงก็อร่อย"},
+  {name:"ซุปข้าวโอ๊ต",meat:"ข้าวโอ๊ต",side:"ผลไม้สด / น้ำผึ้ง / ถั่ว",cuisine:"west",budget:"low",mood:["light","soup"],isHalal:true,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"โจ๊กฝรั่งที่พยายามทำตัวดีต่อสุขภาพ แต่ก็แอบราดน้ำผึ้งเพิ่มอยู่ดี"},
+  {name:"ซุปข้าวโพด",meat:"ข้าวโพด / ครีม",side:"ขนมปังกรอบ",cuisine:"west",budget:"low",mood:["light","soup"],isHalal:true,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"ซุปข้นๆ หวานมันจากข้าวโพด กินแล้วอบอุ่นเหมือนได้กอดตัวเอง"},
+  {name:"ซุปเห็ดทรัฟเฟิล",meat:"เห็ดทรัฟเฟิล / เห็ดรวม",side:"ขนมปังกรอบ",cuisine:"west",budget:"high",mood:["light","soup"],isHalal:true,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"sr",roast:"กลิ่นทรัฟเฟิลลอยมาก่อนช้อนจะถึงปาก ราคาก็ลอยไม่แพ้กัน"},
+  {name:"ริซอตโต้เห็ดทรัฟเฟิล",meat:"เห็ดทรัฟเฟิล / พาร์เมซาน",side:"เนย / ต้นหอม",cuisine:"west",budget:"high",mood:["light","full"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"ssr",roast:"ข้าวเนื้อนุ่มสไตล์อิตาเลียน ที่ทำให้คำว่า 'แค่ข้าว' ใช้ไม่ได้อีกต่อไป"},
+  {name:"ซุปฟักทอง",meat:"ฟักทอง / ครีม",side:"เมล็ดฟักทองอบ",cuisine:"west",budget:"low",mood:["light","soup"],isHalal:true,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"n",roast:"สีส้มอุ่นตา รสหวานมันกำลังดี เมนูที่กินแล้วรู้สึกว่าตัวเองดูแลตัวเองอยู่บ้าง"},
+  {name:"ซุปครีมมันฝรั่งใส่เบคอน",meat:"มันฝรั่ง / เบคอน",side:"ต้นหอม / ชีส",cuisine:"west",budget:"mid",mood:["light","soup"],isHalal:false,isVegan:false,isHighProtein:false,isNoMeat:true,tier:"r",roast:"ซุปมันฝรั่งที่สัญญาว่าจะเบา แต่เบคอนกรอบๆ ข้างในมันฟ้องว่าไม่จริง"},
 ];
 
 // ── Constants ────────────────────────────────────────────────────────────────
@@ -1470,29 +1503,6 @@ function drawReceipt(pick) {
     ctx.beginPath(); ctx.arc(cx, cy, R + 1.5, 0, Math.PI * 2); ctx.stroke();
   }
 
-  // ── Gacha Tier seal (Enso เซน filled + ตัวอักษร gradient/glow — Step 5/7) ──
-  (function () {
-    const t = TIER_META[pick.tier] || TIER_META.n;
-    ctx.save();
-    ctx.translate(W - 94, headerH + 56);
-    ctx.rotate(-0.12);
-    // วง enso filled (เริ่มบาง→หนา→เรียวปลาย + ช่องเปิด) สีตาม tier
-    ctx.globalAlpha = 0.92;
-    ctx.fillStyle = t.stroke;
-    ctx.fill(new Path2D(ensoPath(0, 0, 38)));
-    // label tier — gradient + glow
-    const grad = ctx.createLinearGradient(0, -13, 0, 13);
-    t.g.forEach((c, idx) => grad.addColorStop(t.g.length === 1 ? 0 : idx / (t.g.length - 1), c));
-    ctx.globalAlpha = 1;
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.font = f(700, t.label.length > 2 ? 22 : 27);
-    ctx.shadowColor = t.stroke; ctx.shadowBlur = 9;
-    ctx.fillStyle = grad;
-    ctx.fillText(t.label, 0, 1);
-    ctx.shadowBlur = 0;
-    ctx.restore();
-  })();
-
   ctx.restore(); // end paper clip
 }
 
@@ -1574,6 +1584,8 @@ preloadFlags();
 document.getElementById('ensoCardPath').setAttribute('d', ensoPath(35, 35, 25));
 document.querySelectorAll('.fox-img').forEach(el => el.src = FOX_SRC);   // ใส่รูปมาสคอตทั้ง 3 จุด (hero/popup-default/loading)
 document.getElementById('mehFoxImg').src   = FOX_MEH_SRC;      // fox-meh — โผล่ตอนฟิลเตอร์แคบ/pool หมด   // วง enso การ์ดผล
+document.getElementById('footerFoxImgL').src = FOX_MEH_SRC;    // จิ้งจอก fox-meh ขนาบข้อความ footer 2 ข้าง (นิ่ง ไม่ขยับ)
+document.getElementById('footerFoxImgR').src = FOX_MEH_SRC;
 </script>
 </body>
 </html>
